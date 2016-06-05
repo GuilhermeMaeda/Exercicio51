@@ -4,10 +4,12 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -21,10 +23,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 public class TesteExercicio51 {
 	    
-	    static Font letra = new Font ("Serif",Font.BOLD,20);
+	    static Font letra = new Font ("ARIAL",Font.BOLD,30);
 		
 	    static JFrame tela;
 		static JFrame cadastro;
@@ -35,6 +38,7 @@ public class TesteExercicio51 {
 		static JFrame atEmail;
 		static JFrame atEndereco;
 		static JFrame atTelefone;
+		static JFrame atTodos;
 		static JFrame excluir;
 		static JFrame consultar;
 		static JFrame consulta;
@@ -43,7 +47,6 @@ public class TesteExercicio51 {
 		static JPanel menuTela;
 		
 		static JLabel fundo = new JLabel (new ImageIcon("Imagem\\Teste.png"));
-		static JLabel titulo;
 		
 		static JMenuBar barraMenu;
 		static JMenu menu = new JMenu("Menu");
@@ -64,26 +67,23 @@ public class TesteExercicio51 {
 		static JRadioButton opcao2 = new JRadioButton("Email",false);
 		static JRadioButton opcao3 = new JRadioButton("Telefone",false);
 		static JRadioButton opcao4 = new JRadioButton("Endereço",false);
+		static JRadioButton opcao5 = new JRadioButton("Todos",false);
 		
         static ButtonGroup organiza;
-		
-		static JTextField Nome; 
-		static JTextField CPF;
-		static JTextField identifica;
+        
+        static JTextField identifica;
+        static JTextField Nome;
+		static MaskFormatter CPF;
 		static JTextField Email; 
-		static JTextField Fone;
-		static JTextField Fone1; 
-		static JTextField Fone2; 
+		static MaskFormatter Fone;
+		static MaskFormatter Fone1; 
+		static MaskFormatter Fone2;
         static JTextField Endereco;
-		static JTextField antigoNome;
-		static JTextField antigoCPF;
-		static JTextField novoNome;
-		static JTextField novoCPF;
-		static JTextField antigoEmail;
-		static JTextField novoEmail;
-		static JTextField antigoEndereco;
-		static JTextField novoEndereco;
-		
+        static JFormattedTextField jFTCPF;
+        static JFormattedTextField jFTFONE;
+        static JFormattedTextField jFTFONE1;
+        static JFormattedTextField jFTFONE2;
+        
 		static String [] nomes = {"Identificação","Nome","CPF","Email","Endereço"};
 		static String [] cellphone = {"Identificação","Telefone","Telefone 1","Telefone 2"};
 		static Object[][] sistema = new Object [100] [6];
@@ -183,17 +183,12 @@ public class TesteExercicio51 {
 			botaoSalva.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(Nome.getText().isEmpty() 
-           		    || CPF.getText().isEmpty()
+           		    || jFTCPF.getText().isEmpty()
                     || Email.getText().isEmpty()
                     || Endereco.getText().isEmpty()){
            	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
 					} else {
-						 int teleFone = JOptionPane.showConfirmDialog(null,"Deseja cadastrar telefone(s)?");
-						 if (teleFone == JOptionPane.YES_OPTION){
-							 cadastro.setVisible(false);
-							 salvar();
-							 telefonee();
-						 }else if (identificacao<=5){
+					if (identificacao<=100){
 							   salvar();
 							   JOptionPane.showMessageDialog(null,"Salvo com sucesso!");
                             identificacao++;
@@ -214,7 +209,7 @@ public class TesteExercicio51 {
 			botaoExclui.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(Nome.getText().isEmpty() 
-		           		    || CPF.getText().isEmpty()
+		           		    || jFTCPF.getText().isEmpty()
 		                    || Email.getText().isEmpty()
 		                    || Endereco.getText().isEmpty()){
 		           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
@@ -258,6 +253,13 @@ public class TesteExercicio51 {
 				    
 			}
 			});
+			opcao5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					atualizar.setVisible(false);
+					aTodos();
+				    
+			}
+			});
 		}
 
 		static void Cadastro() {
@@ -267,22 +269,29 @@ public class TesteExercicio51 {
 			cadastro.setResizable(false);
 			cadastro.setJMenuBar(barraMenu);
 			cadastro.setLocationRelativeTo(null);
-	        cadastro.setLayout(new GridLayout (11,10));
+	        cadastro.setLayout(new GridLayout (12,10));
 			cadastro.setVisible(true);
 			JLabel id = new JLabel ("Seu código de identificação é:");
 			cadastro.add(id);
 			identifica = new JTextField(30);
 			identifica.setText("" + identificacao);
 			identifica.setEnabled(false);
+			identifica.setFont(letra);
 			cadastro.add(identifica);
 			JLabel nome = new JLabel ("Nome completo");
 			cadastro.add(nome);
 			Nome = new JTextField(30);
 			cadastro.add(Nome);
-			JLabel cpf = new JLabel ("CPF (Somente números)");
-			cadastro.add(cpf);
-			CPF = new JTextField(30);
-			cadastro.add(CPF);
+			JLabel cpf = new JLabel ("CPF");
+            cadastro.add(cpf);
+		    try {
+				CPF = new MaskFormatter("###.###.###-##");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF.setToolTipText("");
+			cadastro.add(jFTCPF);
 			JLabel email = new JLabel ("E-mail");
 			cadastro.add(email);
 			Email = new JTextField(30);
@@ -292,7 +301,18 @@ public class TesteExercicio51 {
 			Endereco = new JTextField(30);
 			cadastro.add(Endereco);
 		    cadastro.add(botaoSalva);
+		    cadastro.add(cTel);
+		    cTel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cadastro.setVisible(false);
+					telefonee();
+				    
 			}
+			});
+		    
+			}
+		
+
 		static void telefonee(){
 			telefone = new JFrame();
 			telefone.setTitle("Cadastrar telefone(s)");
@@ -307,34 +327,45 @@ public class TesteExercicio51 {
 			telefone.add(identifica);
 			JLabel antigooTelefone = new JLabel ("Telefone padrão");
 			telefone.add(antigooTelefone);
-			Fone = new JTextField(30);
-			telefone.add(Fone);
-			JLabel telefone1 = new JLabel ("Telefone 1");
+			try {
+				Fone = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE.setColumns(10);
+            telefone.add(jFTFONE);
+			JLabel telefone1 = new JLabel ("Telefone celular");
 			telefone.add(telefone1);
-			Fone1 = new JTextField(30);
-			telefone.add(Fone1);
-			JLabel telefone2 = new JLabel ("Telefone 2");
+			try {
+				Fone1 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1.setColumns(10);
+			telefone.add(jFTFONE1);
+			JLabel telefone2 = new JLabel ("Telefone comercial");
 			telefone.add(telefone2);
-			Fone2 = new JTextField(30);
-			telefone.add(Fone2);
-			telefone.add(cTel);
+			try {
+				Fone2 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2.setColumns(10);
+            telefone.add(jFTFONE2);
+			JButton cTel1 = new JButton("Cadastrar telefone(s)");
+            telefone.add(cTel1);
 			telefone.setVisible(true);
-			cTel.addActionListener(new ActionListener() {
+			cTel1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-							||Fone.getText().isEmpty()){
+							||Fone.equals("")== true){
 						JOptionPane.showMessageDialog(null,"Informe pelo menos o seu código de identificação e o telefone padrão!");
 					}else {  
 						salvarTel();
 						JOptionPane.showMessageDialog(null,"Telefone cadastrado com sucesso!");
-						int continua1 = JOptionPane.showConfirmDialog(null, "Deseja continuar cadastrando?");
-                        if (continua1 == JOptionPane.YES_OPTION){
-                        	telefone.setVisible(false);
-                        	identificacao++;
-                     	   Cadastro();
-                     	   } else {
-							telefone.dispose();
-						}
 					}
 				}
 				});
@@ -358,12 +389,14 @@ public class TesteExercicio51 {
 			atualizar.add(opcao2);
 			atualizar.add(opcao3);
 			atualizar.add(opcao4);
+			atualizar.add(opcao5);
 			organiza = new ButtonGroup();
 			organiza.add(opcao);
 			organiza.add(opcao1);
 			organiza.add(opcao2);
 			organiza.add(opcao3);
 			organiza.add(opcao4);
+			organiza.add(opcao5);
 	        
 			}
 		
@@ -374,7 +407,7 @@ public class TesteExercicio51 {
 			excluir.setResizable(false);
 			excluir.setJMenuBar(barraMenu);
 			excluir.setLocationRelativeTo(null);
-			excluir.setLayout(new GridLayout (11,10));
+			excluir.setLayout(new GridLayout (15,10));
 			excluir.setVisible(true);
 			JLabel nome = new JLabel ("Nome completo");
 			excluir.add(nome);
@@ -382,16 +415,48 @@ public class TesteExercicio51 {
 			excluir.add(Nome);
 			JLabel cpf = new JLabel ("CPF (Somente números)");
 			excluir.add(cpf);
-			CPF = new JTextField(30);
-			excluir.add(CPF);
+			try {
+				CPF = new MaskFormatter("###.###.###-##");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF.setToolTipText("");
+			excluir.add(jFTCPF);
 			JLabel email = new JLabel ("E-mail");
 			excluir.add(email);
 			Email = new JTextField(30);
 			excluir.add(Email);
-			JLabel telefone = new JLabel ("Telefone - Ex: (44)12345678");
+			JLabel telefone = new JLabel ("Telefone padrão");
 			excluir.add(telefone);
-			Fone = new JTextField(30);
-			excluir.add(Fone);
+			try {
+				Fone = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE.setColumns(10);
+			excluir.add(jFTFONE);
+			JLabel telefone1 = new JLabel ("Telefone celular");
+			excluir.add(telefone1);
+			try {
+				Fone1 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1.setColumns(10);
+			excluir.add(jFTFONE1);
+			JLabel telefone2 = new JLabel ("Telefone comercial");
+			excluir.add(telefone2);
+			try {
+				Fone2 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2.setColumns(10);
+            excluir.add(jFTFONE2);
 			JLabel endereco = new JLabel ("Endereço");
 			excluir.add(endereco);
 			Endereco = new JTextField(30);
@@ -407,7 +472,7 @@ public class TesteExercicio51 {
 					consultaa();
 				}	
 			});
-	        JButton cTele = new JButton("Consultar telefone");
+	        JButton cTele = new JButton("Consultar telefone(s)");
 	        consultar.add(cTele);
 	        cTele.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -424,7 +489,6 @@ public class TesteExercicio51 {
 			consulta.setResizable(false);
 			consulta.setJMenuBar(barraMenu);
 			consulta.setLocationRelativeTo(null);
-			
 			consulta.setVisible(true);
 			cadastrar.setPreferredScrollableViewportSize( new Dimension (750,490));
 			JScrollPane scroll = new JScrollPane(cadastrar);
@@ -435,7 +499,7 @@ public class TesteExercicio51 {
 			consult.add(scroll);
 			consulta.add(consult, BorderLayout.CENTER);
 			scroll.setVisible(true);
-			JButton cTele = new JButton("Consultar telefone");
+			JButton cTele = new JButton("Consultar telefone(s)");
 	        consulta.add(cTele,BorderLayout.SOUTH);
 	        cTele.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -485,24 +549,22 @@ public class TesteExercicio51 {
 			atNome.add(identifica);
 			JLabel novonome = new JLabel ("Novo nome");
 			atNome.add(novonome);
-			novoNome = new JTextField(30);
-			atNome.add(novoNome);
+			Nome = new JTextField(30);
+			atNome.add(Nome);
 			JButton jbAnome = new JButton ("Atualizar nome");
 	        atNome.add(jbAnome);
         	atNome.setVisible(true);
         	jbAnome.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty() 
-							//||antigoNome.getText().isEmpty()
-							|| novoNome.getText().isEmpty()){
+					   || Nome.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
 					if (confirma == JOptionPane.YES_OPTION){
-						  
-							 int mud = cadastrar.getSelectedRow();
+						     int mud = cadastrar.getSelectedRow();
 							 int mud1 = (int) cadastrar.getModel().getValueAt(mud, 1);
-							 ((DefaultTableModel) cadastrar.getModel()).setValueAt(novoNome.getText(),cadastrar.getSelectedRow(),1);
+							 ((DefaultTableModel) cadastrar.getModel()).setValueAt(Nome.getText(),cadastrar.getSelectedRow(),1);
 						      sistema[mud1 - 1][1] = Nome.getText();
 						      JOptionPane.showMessageDialog(null,"Campo atualizado com sucesso!");
 						}
@@ -524,16 +586,21 @@ public class TesteExercicio51 {
 			atCPF.add(identifica);
 			JLabel novooCPF = new JLabel ("Novo CPF");
 			atCPF.add(novooCPF);
-			novoCPF = new JTextField(30);
-			atCPF.add(novoCPF);
+			try {
+				CPF = new MaskFormatter("###.###.###-##");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF.setToolTipText("");
+			atCPF.add(jFTCPF);
 			JButton jbAcpf = new JButton ("Atualizar CPF");
 	        atCPF.add(jbAcpf);
         	atCPF.setVisible(true);
         	jbAcpf.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-							//||antigoCPF.getText().isEmpty()
-							|| novoCPF.getText().isEmpty()){
+						||jFTCPF.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
@@ -558,16 +625,15 @@ public class TesteExercicio51 {
 			atEmail.add(identifica);
 			JLabel novooEmail = new JLabel ("Novo Email");
 			atEmail.add(novooEmail);
-			novoEmail = new JTextField(30);
-			atEmail.add(novoEmail);
+			Email = new JTextField(30);
+			atEmail.add(Email);
 			JButton jbAemail = new JButton ("Atualizar email");
 	        atEmail.add(jbAemail);
             atEmail.setVisible(true);
         	jbAemail.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-							//||antigoEmail.getText().isEmpty()
-							||novoEmail.getText().isEmpty()){
+					   ||Email.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
@@ -593,16 +659,15 @@ public class TesteExercicio51 {
 			atEndereco.add(identifica);
 			JLabel novooEndereco = new JLabel ("Novo Endereço");
 			atEndereco.add(novooEndereco);
-			novoEndereco = new JTextField(30);
-			atEndereco.add(novoEndereco);
+			Endereco = new JTextField(30);
+			atEndereco.add(Endereco);
 			JButton jbAendereco = new JButton ("Atualizar endereço");
 	        atEndereco.add(jbAendereco);
         	atEndereco.setVisible(true);
         	jbAendereco.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-							//||antigoEndereco.getText().isEmpty()
-							||novoEndereco.getText().isEmpty()){
+						||Endereco.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
@@ -627,23 +692,41 @@ public class TesteExercicio51 {
 			atTelefone.add(identifica);
 			JLabel antigooTelefone = new JLabel ("Telefone padrão");
 			atTelefone.add(antigooTelefone);
-			Fone = new JTextField(30);
-			atTelefone.add(Fone);
+			try {
+				Fone = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE.setColumns(10);
+			atTelefone.add(jFTFONE);
 			JLabel telefone1 = new JLabel ("Telefone 1");
 			atTelefone.add(telefone1);
-			Fone1 = new JTextField(30);
-			atTelefone.add(Fone1);
+			try {
+				Fone1 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1.setColumns(10);
+			atTelefone.add(jFTFONE1);
 			JLabel telefone2 = new JLabel ("Telefone 2");
 			atTelefone.add(telefone2);
-			Fone2 = new JTextField(30);
-			atTelefone.add(Fone2);
+			try {
+				Fone2 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2.setColumns(10);
+			atTelefone.add(jFTFONE2);
 			JButton jbAtelefone = new JButton ("Atualizar telefone(s)");
 	        atTelefone.add(jbAtelefone);
         	atTelefone.setVisible(true);
         	jbAtelefone.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-					    || Fone.getText().isEmpty()){
+					    ||jFTFONE.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe seu nome e o telefone padrão!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
@@ -654,20 +737,102 @@ public class TesteExercicio51 {
 					}
 			});
         }
+         static void aTodos(){
+        	atTodos = new JFrame();
+        	atTodos.setTitle("Atualizar todos os campos");
+        	atTodos.setSize(800,600);
+        	atTodos.setResizable(false);
+        	atTodos.setJMenuBar(barraMenu);
+        	atTodos.setVisible(true);
+        	atTodos.setLocationRelativeTo(null);
+        	atTodos.setLayout(new GridLayout (17,10));
+			JLabel id = new JLabel ("Insira seu código de identificação");
+			atTodos.add(id);
+			identifica = new JTextField(30);
+			atTodos.add(identifica);
+			JLabel nome = new JLabel ("Nome completo");
+			atTodos.add(nome);
+			Nome = new JTextField(30);
+			atTodos.add(Nome);
+			JLabel cpf = new JLabel ("CPF");
+			atTodos.add(cpf);
+		    try {
+				CPF = new MaskFormatter("###.###.###-##");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF.setToolTipText("");
+            atTodos.add(jFTCPF);
+			JLabel email = new JLabel ("E-mail");
+			JLabel antigooTelefone = new JLabel ("Telefone padrão");
+			atTodos.add(antigooTelefone);
+			try {
+				Fone = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE.setColumns(10);
+            atTodos.add(jFTFONE);
+			JLabel telefone1 = new JLabel ("Telefone 1");
+			atTodos.add(telefone1);
+			try {
+				Fone1 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1.setColumns(10);
+            atTodos.add(jFTFONE1);
+			JLabel telefone2 = new JLabel ("Telefone 2");
+			atTodos.add(telefone2);
+			try {
+				Fone2 = new MaskFormatter("(##)####-####");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2.setColumns(10);
+            atTodos.add(jFTFONE2);
+			atTodos.add(email);
+			Email = new JTextField(30);
+			atTodos.add(Email);
+			JLabel endereco = new JLabel ("Endereço");
+			atTodos.add(endereco);
+			Endereco = new JTextField(30);
+			atTodos.add(Endereco);
+			JButton jbAtTodos = new JButton ("Atualizar campos");
+	        atTodos.add(jbAtTodos);
+        	jbAtTodos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(identifica.getText().isEmpty())
+					    //|| Fone.getText().isEmpty())
+							{
+						JOptionPane.showMessageDialog(null,"Informe todos os campos!");
+					}else{
+					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar todos os  campo?");
+					if (confirma == JOptionPane.YES_OPTION){
+						JOptionPane.showMessageDialog(null,"Campos atualizado com sucesso!");
+						}
+					}
+					}
+			});
+        	 
+         }
         static void salvar(){
         	   sistema [total] [0] = identifica.getText();
         	   sistema [total] [1] = Nome.getText();
-        	   sistema [total] [2] = CPF.getText();
+        	   sistema [total] [2] = jFTCPF.getText();
         	   sistema [total] [3] = Email.getText();
         	   sistema [total] [4] = Endereco.getText();
         	   total++;
         	}
-        //Duvida aqui na função salvarTel na matriz eu coloco o total mesmo?
         static void salvarTel(){
      	   tel [infoTel] [0] = identifica.getText();
-     	   tel [infoTel] [1] = Fone.getText();
-     	   tel [infoTel] [2] = Fone1.getText();
-     	   tel [infoTel] [3] = Fone2.getText(); 
+     	   tel [infoTel] [1] = jFTFONE.getText();
+     	   tel [infoTel] [2] = jFTFONE1.getText();
+     	   tel [infoTel] [3] = jFTFONE2.getText(); 
      	   infoTel++;
         }
  }
