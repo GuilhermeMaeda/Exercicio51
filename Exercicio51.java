@@ -28,6 +28,7 @@ import javax.swing.text.MaskFormatter;
 public class TesteExercicio51 {
 	    
 	    static Font letra = new Font ("ARIAL",Font.BOLD,30);
+	     static final String excluido = "Excluído";
 		
 	    static JFrame tela;
 		static JFrame cadastro;
@@ -72,20 +73,20 @@ public class TesteExercicio51 {
         static ButtonGroup organiza;
         
         static JTextField identifica;
-        static JTextField Nome;
-		static MaskFormatter CPF;
-		static JTextField Email; 
-		static MaskFormatter Fone;
-		static MaskFormatter Fone1; 
-		static MaskFormatter Fone2;
-        static JTextField Endereco;
+        static JTextField jtNome;
+		static MaskFormatter jmCPF;
+		static JTextField jtEmail; 
+		static MaskFormatter jmFone;
+		static MaskFormatter jmFone1; 
+		static MaskFormatter jmFone2;
+        static JTextField jtEndereco;
         static JFormattedTextField jFTCPF;
         static JFormattedTextField jFTFONE;
         static JFormattedTextField jFTFONE1;
         static JFormattedTextField jFTFONE2;
         
 		static String [] nomes = {"Identificação","Nome","CPF","Email","Endereço"};
-		static String [] cellphone = {"Identificação","Telefone","Telefone 1","Telefone 2"};
+		static String [] cellphone = {"Identificação","Telefone padrão","Telefone celular","Telefone comercial"};
 		static Object[][] sistema = new Object [100] [6];
 		static Object[][] tel = new Object[100] [4];
 		static JTable cadastrar = new JTable(sistema, nomes);
@@ -173,6 +174,7 @@ public class TesteExercicio51 {
 			botaoE.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Excluir();
+					JOptionPane.showMessageDialog(null,"Selecione o cliente a ser excluído");
 				}
 			});
 			botaoCo.addActionListener(new ActionListener() {
@@ -182,10 +184,10 @@ public class TesteExercicio51 {
 			});
 			botaoSalva.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(Nome.getText().isEmpty() 
+					if(jtNome.getText().isEmpty() 
            		    || jFTCPF.getText().isEmpty()
-                    || Email.getText().isEmpty()
-                    || Endereco.getText().isEmpty()){
+                    || jtEmail.getText().isEmpty()
+                    || jtEndereco.getText().isEmpty()){
            	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
 					} else {
 					if (identificacao<=100){
@@ -196,9 +198,15 @@ public class TesteExercicio51 {
                            if (continua == JOptionPane.YES_OPTION){
                         	   cadastro.setVisible(false);
                         	   Cadastro();
+                        	   cTel.setEnabled(true);
                            } else {
-                        	   cadastro.dispose();
-                           }
+                        	  int tele = JOptionPane.showConfirmDialog(null,"Deseja cadastrar telefone(s) agora?");
+                        	  if(tele == JOptionPane.YES_OPTION){
+                        		  JOptionPane.showMessageDialog(null," Por favor,clique em cadastrar telefone(s)");
+                        	  } else {
+                        		cadastro.dispose();  
+                        	  }
+                        }
 				 	  } else {
 				 		 JOptionPane.showMessageDialog(null, " Desculpe,limite de cadastro de 100 clientes atingido!");
 			             cadastro.dispose();
@@ -208,14 +216,22 @@ public class TesteExercicio51 {
 			});
 			botaoExclui.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(Nome.getText().isEmpty() 
-		           		    || jFTCPF.getText().isEmpty()
-		                    || Email.getText().isEmpty()
-		                    || Endereco.getText().isEmpty()){
-		           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
-							} else {
-								JOptionPane.showMessageDialog(null,"Excluído com sucesso!");
-							}
+					int certeza = JOptionPane.showConfirmDialog(null,"Tem certeza que quer excluir esse cadastro?");
+					if(certeza==JOptionPane.YES_OPTION){
+						((DefaultTableModel) cadastrar.getModel()).setValueAt(excluido,
+								cadastrar.getSelectedRow(), 1);
+						((DefaultTableModel) cadastrar.getModel()).setValueAt(excluido,
+								cadastrar.getSelectedRow(), 2);
+						((DefaultTableModel) cadastrar.getModel()).setValueAt(excluido,
+								cadastrar.getSelectedRow(), 3);
+						((DefaultTableModel) cadastrar.getModel()).setValueAt(excluido,
+								cadastrar.getSelectedRow(), 4);
+						((DefaultTableModel) cadastrar.getModel()).setValueAt(excluido,
+								cadastrar.getSelectedRow(), 5);
+						JOptionPane.showMessageDialog(null,"Excluído com sucesso!");	
+					}else {
+						excluir.dispose();
+					}
 				}
 			});
 			opcao.addActionListener(new ActionListener() {
@@ -280,34 +296,41 @@ public class TesteExercicio51 {
 			cadastro.add(identifica);
 			JLabel nome = new JLabel ("Nome completo");
 			cadastro.add(nome);
-			Nome = new JTextField(30);
-			cadastro.add(Nome);
+			jtNome = new JTextField(30);
+			cadastro.add(jtNome);
 			JLabel cpf = new JLabel ("CPF");
             cadastro.add(cpf);
 		    try {
-				CPF = new MaskFormatter("###.###.###-##");
+				jmCPF = new MaskFormatter("###.###.###-##");
+				jmCPF.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF = new JFormattedTextField(jmCPF);
             jFTCPF.setToolTipText("");
 			cadastro.add(jFTCPF);
 			JLabel email = new JLabel ("E-mail");
 			cadastro.add(email);
-			Email = new JTextField(30);
-			cadastro.add(Email);
-			JLabel endereco = new JLabel ("Endereço");
+			jtEmail = new JTextField(30);
+			cadastro.add(jtEmail);
+			JLabel endereco = new JLabel ("Endereço - Ex: Avenida Brasil - 1122, Maringá-PR");
 			cadastro.add(endereco);
-			Endereco = new JTextField(30);
-			cadastro.add(Endereco);
+			jtEndereco = new JTextField(30);
+			cadastro.add(jtEndereco);
 		    cadastro.add(botaoSalva);
 		    cadastro.add(cTel);
+		    //cTel.setEnabled(false);
 		    cTel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cadastro.setVisible(false);
-					telefonee();
-				    
-			}
+							if(identificacao>1){
+								cadastro.setVisible(false);
+								telefonee();	
+							} else{
+								JOptionPane.showMessageDialog(null,"Para cadastrar telefone(s)é necessário "
+										+ "ter ao menos um cliente cadastrado!, clique em Salvar");
+							}
+					        
+						}
 			});
 		    
 			}
@@ -328,31 +351,34 @@ public class TesteExercicio51 {
 			JLabel antigooTelefone = new JLabel ("Telefone padrão");
 			telefone.add(antigooTelefone);
 			try {
-				Fone = new MaskFormatter("(##)####-####");
+				jmFone = new MaskFormatter("(##)####-####");
+				jmFone.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE = new JFormattedTextField(jmFone);
             jFTFONE.setColumns(10);
             telefone.add(jFTFONE);
 			JLabel telefone1 = new JLabel ("Telefone celular");
 			telefone.add(telefone1);
 			try {
-				Fone1 = new MaskFormatter("(##)####-####");
+				jmFone1 = new MaskFormatter("(##)####-####");
+				jmFone1.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1 = new JFormattedTextField(jmFone1);
             jFTFONE1.setColumns(10);
 			telefone.add(jFTFONE1);
 			JLabel telefone2 = new JLabel ("Telefone comercial");
 			telefone.add(telefone2);
 			try {
-				Fone2 = new MaskFormatter("(##)####-####");
+				jmFone2 = new MaskFormatter("(##)####-####");
+				jmFone2.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2 = new JFormattedTextField(jmFone2);
             jFTFONE2.setColumns(10);
             telefone.add(jFTFONE2);
 			JButton cTel1 = new JButton("Cadastrar telefone(s)");
@@ -361,11 +387,12 @@ public class TesteExercicio51 {
 			cTel1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-							||Fone.equals("")== true){
+							||jFTFONE.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe pelo menos o seu código de identificação e o telefone padrão!");
 					}else {  
 						salvarTel();
-						JOptionPane.showMessageDialog(null,"Telefone cadastrado com sucesso!");
+						JOptionPane.showMessageDialog(null,"Telefone(s)cadastrado(s) com sucesso!");
+						telefone.dispose();
 					}
 				}
 				});
@@ -403,65 +430,20 @@ public class TesteExercicio51 {
 		static void Excluir() {
 			excluir = new JFrame();
 			excluir.setTitle("Excluir Cadastro");
-			excluir.setSize(600,400);
+			excluir.setSize(800,600);
 			excluir.setResizable(false);
 			excluir.setJMenuBar(barraMenu);
 			excluir.setLocationRelativeTo(null);
-			excluir.setLayout(new GridLayout (15,10));
 			excluir.setVisible(true);
-			JLabel nome = new JLabel ("Nome completo");
-			excluir.add(nome);
-			Nome = new JTextField(30);
-			excluir.add(Nome);
-			JLabel cpf = new JLabel ("CPF (Somente números)");
-			excluir.add(cpf);
-			try {
-				CPF = new MaskFormatter("###.###.###-##");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-            jFTCPF = new JFormattedTextField(CPF);
-            jFTCPF.setToolTipText("");
-			excluir.add(jFTCPF);
-			JLabel email = new JLabel ("E-mail");
-			excluir.add(email);
-			Email = new JTextField(30);
-			excluir.add(Email);
-			JLabel telefone = new JLabel ("Telefone padrão");
-			excluir.add(telefone);
-			try {
-				Fone = new MaskFormatter("(##)####-####");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-            jFTFONE = new JFormattedTextField(Fone);
-            jFTFONE.setColumns(10);
-			excluir.add(jFTFONE);
-			JLabel telefone1 = new JLabel ("Telefone celular");
-			excluir.add(telefone1);
-			try {
-				Fone1 = new MaskFormatter("(##)####-####");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-            jFTFONE1 = new JFormattedTextField(Fone1);
-            jFTFONE1.setColumns(10);
-			excluir.add(jFTFONE1);
-			JLabel telefone2 = new JLabel ("Telefone comercial");
-			excluir.add(telefone2);
-			try {
-				Fone2 = new MaskFormatter("(##)####-####");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-            jFTFONE2 = new JFormattedTextField(Fone2);
-            jFTFONE2.setColumns(10);
-            excluir.add(jFTFONE2);
-			JLabel endereco = new JLabel ("Endereço");
-			excluir.add(endereco);
-			Endereco = new JTextField(30);
-			excluir.add(Endereco);
-			excluir.add(botaoExclui);
+			cadastrar.setPreferredScrollableViewportSize( new Dimension (550,500));
+			JScrollPane scroll1 = new JScrollPane(cadastrar);
+			cadastrar.setLayout(null);
+			JPanel exclui = new JPanel();
+			exclui.setSize(800,600);
+			exclui.add(scroll1);
+			excluir.add(exclui, BorderLayout.CENTER);
+			scroll1.setVisible(true);
+			excluir.add(botaoExclui,BorderLayout.SOUTH);
 			}
 		static void Consultar() {
 			JButton cConsultar = new JButton ("Consultar");
@@ -549,23 +531,23 @@ public class TesteExercicio51 {
 			atNome.add(identifica);
 			JLabel novonome = new JLabel ("Novo nome");
 			atNome.add(novonome);
-			Nome = new JTextField(30);
-			atNome.add(Nome);
+			jtNome = new JTextField(30);
+			atNome.add(jtNome);
 			JButton jbAnome = new JButton ("Atualizar nome");
 	        atNome.add(jbAnome);
         	atNome.setVisible(true);
         	jbAnome.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty() 
-					   || Nome.getText().isEmpty()){
+					   || jtNome.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
 					if (confirma == JOptionPane.YES_OPTION){
 						     int mud = cadastrar.getSelectedRow();
 							 int mud1 = (int) cadastrar.getModel().getValueAt(mud, 1);
-							 ((DefaultTableModel) cadastrar.getModel()).setValueAt(Nome.getText(),cadastrar.getSelectedRow(),1);
-						      sistema[mud1 - 1][1] = Nome.getText();
+							 ((DefaultTableModel) cadastrar.getModel()).setValueAt(jtNome.getText(),cadastrar.getSelectedRow(),1);
+						      sistema[mud1 - 1][1] = jtNome.getText();
 						      JOptionPane.showMessageDialog(null,"Campo atualizado com sucesso!");
 						}
 					}
@@ -587,11 +569,12 @@ public class TesteExercicio51 {
 			JLabel novooCPF = new JLabel ("Novo CPF");
 			atCPF.add(novooCPF);
 			try {
-				CPF = new MaskFormatter("###.###.###-##");
+				jmCPF = new MaskFormatter("###.###.###-##");
+				jmCPF.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF = new JFormattedTextField(jmCPF);
             jFTCPF.setToolTipText("");
 			atCPF.add(jFTCPF);
 			JButton jbAcpf = new JButton ("Atualizar CPF");
@@ -625,15 +608,15 @@ public class TesteExercicio51 {
 			atEmail.add(identifica);
 			JLabel novooEmail = new JLabel ("Novo Email");
 			atEmail.add(novooEmail);
-			Email = new JTextField(30);
-			atEmail.add(Email);
+			jtEmail = new JTextField(30);
+			atEmail.add(jtEmail);
 			JButton jbAemail = new JButton ("Atualizar email");
 	        atEmail.add(jbAemail);
             atEmail.setVisible(true);
         	jbAemail.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-					   ||Email.getText().isEmpty()){
+					   ||jtEmail.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
@@ -659,15 +642,15 @@ public class TesteExercicio51 {
 			atEndereco.add(identifica);
 			JLabel novooEndereco = new JLabel ("Novo Endereço");
 			atEndereco.add(novooEndereco);
-			Endereco = new JTextField(30);
-			atEndereco.add(Endereco);
+			jtEndereco = new JTextField(30);
+			atEndereco.add(jtEndereco);
 			JButton jbAendereco = new JButton ("Atualizar endereço");
 	        atEndereco.add(jbAendereco);
         	atEndereco.setVisible(true);
         	jbAendereco.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(identifica.getText().isEmpty()
-						||Endereco.getText().isEmpty()){
+						||jtEndereco.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe todos os dados!");
 					}else{
 					int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja atualizar esse campo?");
@@ -693,31 +676,34 @@ public class TesteExercicio51 {
 			JLabel antigooTelefone = new JLabel ("Telefone padrão");
 			atTelefone.add(antigooTelefone);
 			try {
-				Fone = new MaskFormatter("(##)####-####");
+				jmFone = new MaskFormatter("(##)####-####");
+				jmFone.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE = new JFormattedTextField(jmFone);
             jFTFONE.setColumns(10);
 			atTelefone.add(jFTFONE);
 			JLabel telefone1 = new JLabel ("Telefone 1");
 			atTelefone.add(telefone1);
 			try {
-				Fone1 = new MaskFormatter("(##)####-####");
+				jmFone1 = new MaskFormatter("(##)####-####");
+				jmFone1.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1 = new JFormattedTextField(jmFone1);
             jFTFONE1.setColumns(10);
 			atTelefone.add(jFTFONE1);
 			JLabel telefone2 = new JLabel ("Telefone 2");
 			atTelefone.add(telefone2);
 			try {
-				Fone2 = new MaskFormatter("(##)####-####");
+				jmFone2 = new MaskFormatter("(##)####-####");
+				jmFone2.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2 = new JFormattedTextField(jmFone2);
             jFTFONE2.setColumns(10);
 			atTelefone.add(jFTFONE2);
 			JButton jbAtelefone = new JButton ("Atualizar telefone(s)");
@@ -752,62 +738,66 @@ public class TesteExercicio51 {
 			atTodos.add(identifica);
 			JLabel nome = new JLabel ("Nome completo");
 			atTodos.add(nome);
-			Nome = new JTextField(30);
-			atTodos.add(Nome);
+			jtNome = new JTextField(30);
+			atTodos.add(jtNome);
 			JLabel cpf = new JLabel ("CPF");
 			atTodos.add(cpf);
 		    try {
-				CPF = new MaskFormatter("###.###.###-##");
+				jmCPF = new MaskFormatter("###.###.###-##");
+				jmCPF.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTCPF = new JFormattedTextField(CPF);
+            jFTCPF = new JFormattedTextField(jmCPF);
             jFTCPF.setToolTipText("");
             atTodos.add(jFTCPF);
 			JLabel email = new JLabel ("E-mail");
 			JLabel antigooTelefone = new JLabel ("Telefone padrão");
 			atTodos.add(antigooTelefone);
 			try {
-				Fone = new MaskFormatter("(##)####-####");
+				jmFone = new MaskFormatter("(##)####-####");
+				jmFone.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE = new JFormattedTextField(Fone);
+            jFTFONE = new JFormattedTextField(jmFone);
             jFTFONE.setColumns(10);
             atTodos.add(jFTFONE);
 			JLabel telefone1 = new JLabel ("Telefone 1");
 			atTodos.add(telefone1);
 			try {
-				Fone1 = new MaskFormatter("(##)####-####");
+				jmFone1 = new MaskFormatter("(##)####-####");
+				jmFone1.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE1 = new JFormattedTextField(Fone1);
+            jFTFONE1 = new JFormattedTextField(jmFone1);
             jFTFONE1.setColumns(10);
             atTodos.add(jFTFONE1);
 			JLabel telefone2 = new JLabel ("Telefone 2");
 			atTodos.add(telefone2);
 			try {
-				Fone2 = new MaskFormatter("(##)####-####");
+				jmFone2 = new MaskFormatter("(##)####-####");
+				jmFone2.setPlaceholderCharacter('_');
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-            jFTFONE2 = new JFormattedTextField(Fone2);
+            jFTFONE2 = new JFormattedTextField(jmFone2);
             jFTFONE2.setColumns(10);
             atTodos.add(jFTFONE2);
 			atTodos.add(email);
-			Email = new JTextField(30);
-			atTodos.add(Email);
+			jtEmail = new JTextField(30);
+			atTodos.add(jtEmail);
 			JLabel endereco = new JLabel ("Endereço");
 			atTodos.add(endereco);
-			Endereco = new JTextField(30);
-			atTodos.add(Endereco);
+			jtEndereco = new JTextField(30);
+			atTodos.add(jtEndereco);
 			JButton jbAtTodos = new JButton ("Atualizar campos");
 	        atTodos.add(jbAtTodos);
         	jbAtTodos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(identifica.getText().isEmpty())
-					    //|| Fone.getText().isEmpty())
+					if(identifica.getText().isEmpty()
+					    || jFTFONE.getText().isEmpty())
 							{
 						JOptionPane.showMessageDialog(null,"Informe todos os campos!");
 					}else{
@@ -822,10 +812,10 @@ public class TesteExercicio51 {
          }
         static void salvar(){
         	   sistema [total] [0] = identifica.getText();
-        	   sistema [total] [1] = Nome.getText();
+        	   sistema [total] [1] = jtNome.getText();
         	   sistema [total] [2] = jFTCPF.getText();
-        	   sistema [total] [3] = Email.getText();
-        	   sistema [total] [4] = Endereco.getText();
+        	   sistema [total] [3] = jtEmail.getText();
+        	   sistema [total] [4] = jtEndereco.getText();
         	   total++;
         	}
         static void salvarTel(){
