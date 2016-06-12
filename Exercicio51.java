@@ -94,6 +94,7 @@ public class TesteExercicio51 {
 		
 		
 		static int identificacao = 1;
+		static int identificacaoT;
 		static int infoTel;
 		static int total = 0;
 		static int somaTel = 1;
@@ -322,15 +323,30 @@ public class TesteExercicio51 {
 		    //cTel.setEnabled(false);
 		    cTel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-							if(identificacao>1){
+					if(jtNome.getText().isEmpty() 
+		           		    || jFTCPF.getText().isEmpty()
+		                    || jtEmail.getText().isEmpty()
+		                    || jtEndereco.getText().isEmpty()){
+		           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
+					} else{
+					int permissao = JOptionPane.showConfirmDialog(null,"Deseja salvar este cliente antes de cadastrar telefone(s)?");
+					if (permissao == JOptionPane.YES_OPTION){
+						salvar();
+						identificacao++;
+						JOptionPane.showMessageDialog(null,"Cliente salvo com sucesso!");
+						cadastro.setVisible(false);
+						telefonee();
+					} else{
+					if(identificacaoT<=identificacao){
 								cadastro.setVisible(false);
-								telefonee();	
-							} else{
+								telefonee();
+								}else{
 								JOptionPane.showMessageDialog(null,"Para cadastrar telefone(s)é necessário "
 										+ "ter ao menos um cliente cadastrado!, clique em Salvar");
 							}
-					        
-						}
+			              } 
+					}
+				}
 			});
 		    
 			}
@@ -389,7 +405,9 @@ public class TesteExercicio51 {
 					if(identifica.getText().isEmpty()
 							||jFTFONE.getText().isEmpty()){
 						JOptionPane.showMessageDialog(null,"Informe pelo menos o seu código de identificação e o telefone padrão!");
-					}else {  
+					}else if (identificacaoT > identificacao){
+									JOptionPane.showMessageDialog(null,"Identificação de cliente não encontrado, verifique se a Identificação do cliente existe!");
+					} else {
 						salvarTel();
 						JOptionPane.showMessageDialog(null,"Telefone(s)cadastrado(s) com sucesso!");
 						telefone.dispose();
