@@ -217,16 +217,7 @@ public class TesteExercicio51 {
 				public void actionPerformed(ActionEvent e) {
 					int certeza = JOptionPane.showConfirmDialog(null,"Tem certeza que quer excluir esse cadastro?");
 					if(certeza==JOptionPane.YES_OPTION){
-						((DefaultTableModel) cadastrar.getModel()).setValueAt(EXCLUIDO,
-								cadastrar.getSelectedRow(), 1);
-						((DefaultTableModel) cadastrar.getModel()).setValueAt(EXCLUIDO,
-								cadastrar.getSelectedRow(), 2);
-						((DefaultTableModel) cadastrar.getModel()).setValueAt(EXCLUIDO,
-								cadastrar.getSelectedRow(), 3);
-						((DefaultTableModel) cadastrar.getModel()).setValueAt(EXCLUIDO,
-								cadastrar.getSelectedRow(), 4);
-						((DefaultTableModel) cadastrar.getModel()).setValueAt(EXCLUIDO,
-								cadastrar.getSelectedRow(), 5);
+						 ((DefaultTableModel)cadastrar.getModel()).removeRow(cadastrar.getSelectedRow());
 						JOptionPane.showMessageDialog(null,"Excluído com sucesso!");	
 					}else {
 						excluir.dispose();
@@ -708,3 +699,4 @@ public class TesteExercicio51 {
      	   infoTel++;
         }
  }
+        
