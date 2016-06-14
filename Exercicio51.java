@@ -133,7 +133,8 @@ public class TesteExercicio51 {
 			informacao.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,
-							"Limite máximo de 100 cadastros\n Ao sair, todos os dados serão perdidos");
+							"Limite máximo de 100 cadastros\n Ao sair, todos os dados serão perdidos\n"
+							+ "O cadastro de telefones só será possível se tiver ao menos um cliente cadastrado!");
 				}
 			});
 			ajuda.addActionListener(new ActionListener() {
@@ -149,6 +150,16 @@ public class TesteExercicio51 {
 				}
 			});
 		}
+		static int linhaselecionada(){
+			int escolha = cadastrar.getSelectedRow();
+			int pSistema = (int) cadastrar.getValueAt(escolha, 0);
+			return pSistema;
+			}
+		static int linhaselecionadaTel(){
+			int escolhaT = telefones.getSelectedRow();
+			int pTelefone = (int) telefones.getValueAt(escolhaT, 0);
+			return pTelefone;
+			}
 
 		static void botao() {
 			botaoC.setBounds(0, 0, 150, 50);
@@ -193,6 +204,7 @@ public class TesteExercicio51 {
 							   salvar();
 							   JOptionPane.showMessageDialog(null,"Salvo com sucesso!");
                             identificacao++;
+                            cTel.setEnabled(true);
                            int continua = JOptionPane.showConfirmDialog(null, "Deseja continuar cadastrando?");
                            if (continua == JOptionPane.YES_OPTION){
                         	   cadastro.setVisible(false);
@@ -225,17 +237,7 @@ public class TesteExercicio51 {
 				}
 			});
 		}
-		
-		static int linhaselecionada(){
-		int escolha = cadastrar.getSelectedRow();
-		int pSistema = (int) cadastrar.getValueAt(escolha, 0);
-		return pSistema;
-		}
-		static int linhaselecionadaTel(){
-			int escolhaT = telefones.getSelectedRow();
-			int pTelefone = (int) telefones.getValueAt(escolhaT, 0);
-			return pTelefone;
-			}
+	
 		static void Cadastro() {
 			cadastro = new JFrame();
 			cadastro.setTitle("Cadastrar novo cliente");
@@ -243,8 +245,10 @@ public class TesteExercicio51 {
 			cadastro.setResizable(false);
 			cadastro.setJMenuBar(barraMenu);
 			cadastro.setLocationRelativeTo(null);
-	        cadastro.setLayout(new GridLayout (12,10));
+	        cadastro.setLayout(new GridLayout (13,10));
 			cadastro.setVisible(true);
+			JLabel info = new JLabel ("*Informe todos os dados!*");
+			cadastro.add(info);
 			JLabel id = new JLabel ("Seu código de identificação é:");
 			cadastro.add(id);
 			identifica = new JTextField(30);
@@ -277,6 +281,7 @@ public class TesteExercicio51 {
 			cadastro.add(jtEndereco);
 		    cadastro.add(botaoSalva);
 		    cadastro.add(cTel);
+		    cTel.setEnabled(false);
 		    cTel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(jtNome.getText().isEmpty() 
@@ -285,11 +290,8 @@ public class TesteExercicio51 {
 		                    || jtEndereco.getText().isEmpty()){
 		           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
 					} else{
-					int permissao = JOptionPane.showConfirmDialog(null,"Deseja salvar este cliente antes de cadastrar telefone(s)?");
+					int permissao = JOptionPane.showConfirmDialog(null,"Cadastrar telefone(s)?");
 					if (permissao == JOptionPane.YES_OPTION){
-						salvar();
-						identificacao++;
-						JOptionPane.showMessageDialog(null,"Cliente salvo com sucesso!");
 						cadastro.setVisible(false);
 						telefonee();
 					} else{
@@ -439,6 +441,12 @@ public class TesteExercicio51 {
 			edit.add(acaoeditar);
 			acaoeditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					if(jtNome.getText().isEmpty() 
+		           		    || jFTCPF.getText().isEmpty()
+		                    || jtEmail.getText().isEmpty()
+		                    || jtEndereco.getText().isEmpty()){
+		           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
+					}else {
 					int avanca = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja atualizar este cadastro?");
 					if (avanca == JOptionPane.YES_OPTION){
 						int pSistema = linhaselecionada();
@@ -450,6 +458,7 @@ public class TesteExercicio51 {
 								pSistema - 1, 3);
 						((DefaultTableModel) cadastrar.getModel()).setValueAt(jtEndereco.getText(), 
 								pSistema - 1, 4);
+						cadastrar.repaint();
 
 						sistema[pSistema - 1][1] = jtNome.getText();
 						sistema[pSistema - 1][2] = jFTCPF.getText();
@@ -458,6 +467,7 @@ public class TesteExercicio51 {
 						
 				} else{
 					edit.dispose();
+				}
 				}
 				}
 			});
@@ -537,7 +547,12 @@ public class TesteExercicio51 {
             editT.add(acaoAtTel);
             acaoAtTel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int avanca = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja atualizar este cadastro?");
+					if(identifica.getText().isEmpty()
+							||jFTFONE.getText().isEmpty()){
+						JOptionPane.showMessageDialog(null,"Informe pelo menos"
+								+ " o seu código de identificação e o telefone padrão!");
+					}else{
+						int avanca = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja atualizar este cadastro?");
 					if (avanca == JOptionPane.YES_OPTION){
 						int pTelefone = linhaselecionadaTel();
                         ((DefaultTableModel) telefones.getModel()).setValueAt(jFTFONE.getText(), pTelefone - 1,
@@ -546,6 +561,7 @@ public class TesteExercicio51 {
 								pTelefone - 1, 2);
 						((DefaultTableModel) telefones.getModel()).setValueAt(jFTFONE2.getText(), 
 								pTelefone - 1, 3);
+						telefones.repaint();
 
 						tel[pTelefone - 1][1] = jtNome.getText();
 						tel[pTelefone - 1][2] = jFTCPF.getText();
@@ -554,6 +570,7 @@ public class TesteExercicio51 {
 						
 				} else{
 					editT.dispose();
+				}
 				}
 				}
 			});
@@ -607,7 +624,8 @@ public class TesteExercicio51 {
 				excluiT.add(excT, BorderLayout.SOUTH);
 				excT.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						 
+						((DefaultTableModel)telefones.getModel()).removeRow(telefones.getSelectedRow());
+						JOptionPane.showMessageDialog(null,"Excluído com sucesso!");
 					}	
 				});
 		 }
@@ -699,4 +717,3 @@ public class TesteExercicio51 {
      	   infoTel++;
         }
  }
-        
