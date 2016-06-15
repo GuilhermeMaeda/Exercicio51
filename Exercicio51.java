@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
-public class TesteExercicio51 {
+public class Ex51 {
 	    
 	    static Font letra = new Font ("ARIAL",Font.BOLD,30);
 	     static final String EXCLUIDO = "Excluído";
@@ -204,7 +204,6 @@ public class TesteExercicio51 {
 							   salvar();
 							   JOptionPane.showMessageDialog(null,"Salvo com sucesso!");
                             identificacao++;
-                            cTel.setEnabled(true);
                            int continua = JOptionPane.showConfirmDialog(null, "Deseja continuar cadastrando?");
                            if (continua == JOptionPane.YES_OPTION){
                         	   cadastro.setVisible(false);
@@ -253,7 +252,7 @@ public class TesteExercicio51 {
 			cadastro.add(id);
 			identifica = new JTextField(30);
 			identifica.setText("" + identificacao);
-			identifica.setEnabled(false);
+			identifica.setEditable(false);
 			identifica.setFont(letra);
 			cadastro.add(identifica);
 			JLabel nome = new JLabel ("Nome completo");
@@ -281,19 +280,31 @@ public class TesteExercicio51 {
 			cadastro.add(jtEndereco);
 		    cadastro.add(botaoSalva);
 		    cadastro.add(cTel);
-		    cTel.setEnabled(false);
+		    //cTel.setEnabled(false);
 		    cTel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(jtNome.getText().isEmpty() 
+					if(identificacao>1){
+						cTel.setEnabled(true);
+						cadastro.setVisible(false);
+						telefonee();
+					} else if(jtNome.getText().isEmpty() 
 		           		    || jFTCPF.getText().isEmpty()
 		                    || jtEmail.getText().isEmpty()
 		                    || jtEndereco.getText().isEmpty()){
 		           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
-					} else{
+					} else {
 					int permissao = JOptionPane.showConfirmDialog(null,"Cadastrar telefone(s)?");
 					if (permissao == JOptionPane.YES_OPTION){
+						int certo = JOptionPane.showConfirmDialog(null, "Deseja salvar este cadastro antes?");
+						if(certo == JOptionPane.YES_OPTION){
+							salvar();
+							JOptionPane.showMessageDialog(null, "Cliente salvo com sucesso!");
+							cadastro.setVisible(false);
+							telefonee();
+						}else {
 						cadastro.setVisible(false);
 						telefonee();
+						}
 					} else{
 				        JOptionPane.showMessageDialog(null,"Para cadastrar telefone(s)é necessário "
 										+ "ter ao menos um cliente cadastrado!, clique em Salvar");
@@ -467,8 +478,8 @@ public class TesteExercicio51 {
 						
 				} else{
 					edit.dispose();
-				}
-				}
+				  }
+				 }
 				}
 			});
 			
