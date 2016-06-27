@@ -1,876 +1,618 @@
-import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.text.ParseException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.RowFilter;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 import javax.swing.text.MaskFormatter;
 
-
-public class Ex51Jao {
-
-	static JFrame telaMenu = new JFrame("Cadastro de Clientes");
-	static JFrame telaCadastro = new JFrame("Cadastro");
-	static JFrame telaEditar = new JFrame("Editar Cliente");
-	static JFrame telaTelefone = new JFrame("Cadastrar Telefone");
-
-	static JButton botaoCadastrar = new JButton("Cadastrar Cliente");
-	static JButton botaoSalvarCadastro = new JButton("Cadastrar");
-	static JButton botaoEditar = new JButton("Editar Cliente");
-	static JButton botaoSalvarEdicao = new JButton("Salvar");
-	static JButton botaoCadastrarTel = new JButton("Cadastrar/Editar Telefone");
-	static JButton botaoExcluir = new JButton("Excluir Cliente");
-	static JButton sobre = new JButton("Sobre");
-	static JButton botaoVoltarMenu = new JButton("Voltar ao Menu");
-	static JButton botaoSair = new JButton("Sair");
-	static JButton botaoSalvarTelefone = new JButton("Salvar Telefone");
-	static JButton botaoExcluirTelefone = new JButton("Excluir Telefone");
-	static JButton botaoLimparPesquisa = new JButton("Limpar pesquisa");
-
-	static JLabel lbCadastroMenu = new JLabel("Cadastro de Clientes");
-	static JLabel lbCadastro = new JLabel("Cadastro");
-	static JLabel lbCodigo = new JLabel("Código: ");
-	static JLabel lbImprimirCodigo = new JLabel();
-	static JLabel lbNome = new JLabel("Nome: ");
-	static JLabel lbEndereco = new JLabel("Endereço: ");
-	static JLabel lbCpf = new JLabel("CPF: ");
-	static JLabel lbEditar = new JLabel("Editar");
-	static JLabel lbJoao = new JLabel("João Paulo Nunes Marques");
-	static JLabel lbTelefone = new JLabel("Cadastrar Telefone");
-	static JLabel lbResidencial = new JLabel("Residencial: ");
-	static JLabel lbComercial = new JLabel("Comercial: ");
-	static JLabel lbCelular = new JLabel("Celular: ");
-	static JLabel lbPesquisar = new JLabel("Pesquisar:");
-
-	static JTextField textNome = new JTextField();
-	static JTextField textEndereco = new JTextField();
-	static JTextField textCpf = new JTextField();
-	static JTextField textResidencial = new JTextField();
-	static JTextField textComercial = new JTextField();
-	static JTextField textCelular = new JTextField();
-	static JTextField textPesquisa = new JTextField();
-
-	static MaskFormatter mascaraCPF = null;
-	static MaskFormatter mascaraResidencial = null;
-	static MaskFormatter mascaraComercial = null;
-	static MaskFormatter mascaraCelular = null;
-
-	static JTable tableConsultas = new JTable();
-	static JPanel panelConsulta = new JPanel();
-	static JScrollPane scrollConsulta = new JScrollPane(tableConsultas);
-
-	private static final String ARIAL = "Arial";
-	private static final String INATIVO = "INATIVO";
-	private static final String IMAGEM_CADASTRAR = "/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif";
-	private static final String IMAGEM_EXCLUIR = "/javax/swing/plaf/metal/icons/ocean/close.gif";
-	private static final String IMAGEM_SOBRE = "/javax/swing/plaf/metal/icons/ocean/info.png";
-	private static final String IMAGEM_EDITAR = "/com/sun/java/swing/plaf/windows/icons/TreeOpen.gif";
-	static int codigo = 0;
-	static int qntcliente = 100;
-	static int informacao = 3;
-	static String[][] posicao = new String[qntcliente][informacao];
-	static String[][] posicaoTelefone = new String[qntcliente][informacao];
-
-	public static void main(String[] args) {
-
-		// alterando tema pelo LookAndFeel
-		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Exception e) {
-
+public class Exercicio51 {
+	    
+	    static Font letra = new Font ("ARIAL",Font.BOLD,30);
+	     static final String EXCLUIDO = "Excluído";
+		
+	    static JFrame tela;
+		static JFrame cadastro;
+		static JFrame telefone;
+		static JFrame atualizar;		
+		static JFrame atTelefone;
+		static JFrame excluir;
+		static JFrame consultar;
+		static JFrame consulta;
+		static JFrame consultaaTele;
+		static JFrame edit;
+		static JFrame editT;
+		
+		static JPanel menuTela;
+		
+		static JLabel fundo = new JLabel (new ImageIcon("Imagem\\Teste.png"));
+		
+		static JMenuBar barraMenu;
+		static JMenu menu = new JMenu("Menu");
+		static JMenuItem informacao = new JMenuItem("Informações");
+		static JMenuItem ajuda = new JMenuItem("Ajuda");
+		static JMenuItem sobre = new JMenuItem("Sobre o software");
+		
+		static JButton botaoC =  new JButton("Cadastrar");
+		static JButton botaoA = new JButton("Atualizar");
+		static JButton botaoE = new JButton("Excluir");
+		static JButton botaoCo = new JButton("Consultar");
+		static JButton botaoSalva = new JButton("Salvar");
+		static JButton botaoExclui = new JButton ("Excluir");
+		static JButton avancar = new JButton ("Avançar");
+		static JButton cTel = new JButton ("Cadastrar telefone");
+		static JButton editar = new JButton ("Editar Cadastro");
+		static JButton acaoeditar = new JButton ("Salvar alterações");
+		static JButton atualizaT = new JButton ("Atualizar telefone(s)");
+		static JButton atualizaTel = new JButton ("Editar telefone(s)");
+		static JButton acaoAtTel = new JButton ("Salvar alterações");
+        
+        static JTextField identifica;
+        static JTextField jtNome;
+	static MaskFormatter jmCPF;
+	static JTextField jtEmail; 
+	static MaskFormatter jmFone;
+	static MaskFormatter jmFone1; 
+	static MaskFormatter jmFone2;
+        static JTextField jtEndereco;
+        static JFormattedTextField jFTCPF;
+        static JFormattedTextField jFTFONE;
+        static JFormattedTextField jFTFONE1;
+        static JFormattedTextField jFTFONE2;
+        
+		static String [] nomes = {"Identificação","Nome","CPF","Email","Endereço"};
+		static String [] cellphone = {"Identificação","Telefone padrão","Telefone celular","Telefone comercial"};
+		static Object[][] sistema = new Object [100] [6];
+		static Object[][] tel = new Object[100] [4];
+		static JTable cadastrar = new JTable(sistema, nomes);
+		static JTable telefones = new JTable(tel, cellphone);
+		
+		
+		static int identificacao = 1;
+		static int identificacaoT;
+		static int infoTel;
+		static int total = 0;
+		
+		
+		
+		
+		public static void main(String[] args) {
+			tela = new JFrame();
+			barraMenu = new JMenuBar();
+			tela();
+			menu();
+			botao();
 		}
 
-		janelaMenu();
-		janelaCadastrar();
-		janelaTelefonar();
-		janelaEditar();
-		janelaExcluir();
-		acaoSobre();
-		acaoCadastrar();
-		acaoSalvarTelefone(posicaoTelefone);
-		acaoExcluirTelefone();
-		acaoEditar();
-		acaoSair();
-		acaoLimparPesquisa();
+		static void tela() {
 
-	}
+			tela.setTitle("Cadastro de clientes");
+			tela.setSize(600, 400);
+			tela.setLocationRelativeTo(null);
+			tela.setResizable(false);
+			tela.setVisible(true);
+			tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+		    menuTela = new JPanel();
+		    menuTela.setSize(600,400);
+		    menuTela.setLayout(null);
+		    menuTela.setVisible(true);
+		    menuTela.add(botaoC);
+		    menuTela.add(botaoA);
+		    menuTela.add(botaoE);
+		    menuTela.add(botaoCo);
+		    botaoA.setEnabled(false);
+		    botaoE.setEnabled(false);
+		    botaoCo.setEnabled(false);
+		    menuTela.add(fundo);
+		    fundo.setBounds(0,0,600,400);
+			tela.add(menuTela);
+			
+		} 
 
-	static void janelaMenu() {
+		static void menu() {
 
-		telaMenu.add(botaoSair);
-		botaoSair.setBounds(650, 590, 200, 50);
-
-		componentesMenu();
-
-		telaMenu.setLayout(null);
-		telaMenu.setSize(900, 700);
-		telaMenu.getContentPane().setBackground(Color.WHITE);
-		telaMenu.setResizable(false);
-		telaMenu.setLocationRelativeTo(null);
-		telaMenu.setVisible(true);
-		telaMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		telaMenu.add(lbCadastroMenu);
-		lbCadastroMenu.setBounds(325, -255, 600, 600);
-		lbCadastroMenu.setFont(new Font(ARIAL, Font.BOLD, 25));
-
-		telaMenu.add(lbJoao);
-		lbJoao.setFont(new Font(ARIAL, Font.PLAIN, 15));
-		lbJoao.setBounds(395, 360, 600, 600);
-		lbJoao.setFont(new Font(ARIAL, Font.BOLD, 10));
-
-	}
-
-	@SuppressWarnings("serial")
-	static void componentesMenu() {
-
-		telaMenu.add(botaoCadastrar);
-		botaoCadastrar.setFont(new Font(ARIAL, Font.BOLD, 13));
-		botaoCadastrar.setToolTipText("Clique para cadastrar um cliente");
-		botaoCadastrar.setBounds(50, 90, 200, 50);
-		//botaoCadastrar.setIcon(new ImageIcon(Exercicio51.class.getResource(IMAGEM_CADASTRAR)));
-
-		telaMenu.add(lbPesquisar);
-		lbPesquisar.setBounds(50, 155, 100, 30);
-		lbPesquisar.setFont(new Font(ARIAL, Font.BOLD, 13));
-
-		telaMenu.add(textPesquisa);
-		textPesquisa.setBounds(120, 158, 225, 25);
-
-		telaMenu.add(botaoCadastrarTel);
-		botaoCadastrarTel.setFont(new Font(ARIAL, Font.BOLD, 13));
-		botaoCadastrarTel.setToolTipText("Clique para cadastrar um telefone");
-		botaoCadastrarTel.setBounds(50, 590, 220, 50);
-		//botaoCadastrarTel.setIcon(new ImageIcon(Exercicio51.class.getResource(IMAGEM_CADASTRAR)));
-
-		telaMenu.add(botaoExcluirTelefone);
-		botaoExcluirTelefone.setFont(new Font(ARIAL, Font.BOLD, 13));
-		botaoExcluirTelefone.setToolTipText("Clique para excluir o telefone");
-		botaoExcluirTelefone.setBounds(280, 590, 200, 50);
-		//botaoExcluirTelefone.setIcon(new ImageIcon(Exercicio51.class.getResource(IMAGEM_EXCLUIR)));
-
-		telaMenu.add(botaoEditar);
-		botaoEditar.setFont(new Font(ARIAL, Font.BOLD, 13));
-		botaoEditar.setToolTipText("Clique para atualizar um cliente");
-		botaoEditar.setBounds(260, 90, 200, 50);
-		//botaoEditar.setIcon(new ImageIcon(Exercicio51.class.getResource(IMAGEM_EDITAR)));
-
-		telaMenu.add(botaoExcluir);
-		botaoExcluir.setFont(new Font(ARIAL, Font.BOLD, 13));
-		botaoExcluir.setToolTipText("Clique para excluir um cliente");
-		botaoExcluir.setBounds(470, 90, 200, 50);
-		//botaoExcluir.setIcon(new ImageIcon(Exercicio51.class.getResource(IMAGEM_EXCLUIR)));
-
-		telaMenu.add(sobre);
-		sobre.setBounds(505, 590, 120, 50);
-		sobre.setFont(new Font(ARIAL, Font.ITALIC, 15));
-		//sobre.setIcon(new ImageIcon(Exercicio51.class.getResource(IMAGEM_SOBRE)));
-
-		tableConsultas.setLayout(null);
-		tableConsultas.revalidate();
-		tableConsultas.setBounds(0, 0, 800, 500);
-		tableConsultas.setModel(new DefaultTableModel(
-				new Object[] { "Código", "Nome", "Endereço", "CPF", "Tel. Residencial", "Tel. Comercial", "Celular" },
-				0) {
-			// bloqueando a edição das linhas
-			@Override
-			public boolean isCellEditable(int row, int col) {
-				return false;
-			}
-
-		});
-
-		scrollConsulta.add(tableConsultas);
-		scrollConsulta.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollConsulta.setBounds(0, 0, 800, 360);
-		scrollConsulta.setViewportView(tableConsultas);
-
-		telaMenu.add(panelConsulta);
-		panelConsulta.add(scrollConsulta);
-		panelConsulta.setLayout(null);
-		panelConsulta.setBounds(50, 200, 800, 360);
-
-		for (int i = 0; i < codigo; i++) {
-			DefaultTableModel valores = (DefaultTableModel) tableConsultas.getModel();
-			valores.addRow(new Object[] { i + 1, posicao[i][0], posicao[i][1], posicao[i][2], posicaoTelefone[i][0],
-					posicaoTelefone[i][1], posicaoTelefone[i][2] });
-			acaoPesquisar(tableConsultas);
+			tela.setJMenuBar(barraMenu);
+			barraMenu.add(menu);
+			menu.add(informacao);
+			menu.add(ajuda);
+			menu.add(sobre);
+			informacao.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,
+							"Limite máximo de 100 cadastros\n Ao sair, todos os dados serão perdidos\n"
+							+ "O cadastro de telefones só será possível se tiver ao menos um cliente cadastrado!");
+				}
+			});
+			ajuda.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,
+							"Sistema de cadastro, atualização, exclusão e consulta de clientes");
+				}
+			});
+			sobre.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,
+							"Desenvolvido por Guilherme Maeda\n Acadêmico do curso de ciência da computação");
+				}
+			});
 		}
 
-	}
+		static void botao() {
+			botaoC.setBounds(0, 0, 150, 50);
+			botaoA.setBounds(150, 0, 150, 50);
+			botaoE.setBounds(300, 0, 150, 50);
+			botaoCo.setBounds(450, 0, 150, 50);
+			
+			botaoC.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Cadastro();
+					
+					
+				}
+			});
 
-	static void janelaCadastrar() {
+			botaoA.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Atualizar();
+				}
+			});
 
-		botaoCadastrar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				limparPesquisa();
-
-				textNome.setText(null);
-				textEndereco.setText(null);
-				textCpf.setText(null);
-
-				componentesCadastar();
-
-				telaCadastro.add(botaoVoltarMenu);
-				acaoVoltarMenu();
-				botaoVoltarMenu.setBounds(550, 490, 200, 50);
-
-				telaCadastro.setLayout(null);
-				telaCadastro.setSize(800, 600);
-				telaCadastro.getContentPane().setBackground(Color.WHITE);
-				telaCadastro.setResizable(false);
-				telaCadastro.setLocationRelativeTo(null);
-				telaCadastro.setVisible(true);
-				telaCadastro.add(lbCadastro);
-
-				lbCadastro.setBounds(345, -220, 600, 600);
-				lbCadastro.setFont(new Font(ARIAL, Font.BOLD, 30));
-
-			}
-		});
-
-	}
-
-	static void componentesCadastar() {
-
-		telaCadastro.add(lbCodigo);
-		lbCodigo.setBounds(50, 150, 200, 50);
-		lbCodigo.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		telaCadastro.add(lbImprimirCodigo);
-		lbImprimirCodigo.setBounds(110, 150, 200, 50);
-		lbImprimirCodigo.setText(String.valueOf(codigo + 1));
-		lbImprimirCodigo.setFont(new Font(ARIAL, Font.BOLD, 15));
-
-		telaCadastro.add(lbNome);
-		lbNome.setBounds(140, 150, 200, 50);
-		lbNome.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		telaCadastro.add(textNome);
-		textNome.setBounds(190, 160, 555, 30);
-
-		telaCadastro.add(lbEndereco);
-		lbEndereco.setBounds(50, 250, 200, 50);
-		lbEndereco.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		telaCadastro.add(textEndereco);
-		textEndereco.setBounds(125, 260, 620, 30);
-
-		telaCadastro.add(lbCpf);
-		lbCpf.setBounds(50, 350, 200, 50);
-		lbCpf.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		telaCadastro.add(textCpf);
-		textCpf.setBounds(90, 360, 655, 30);
-
-		telaCadastro.add(botaoSalvarCadastro);
-		botaoSalvarCadastro.setToolTipText("Clique para confirmar o cadastro");
-		botaoSalvarCadastro.setBounds(300, 420, 200, 50);
-
-	}
-
-	static void acaoCadastrar() {
-
-		botaoSalvarCadastro.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				// validção de todos campos preenchidos
-				if (textNome.getText().trim().isEmpty() || textEndereco.getText().trim().isEmpty()
-						|| textCpf.getText().trim().isEmpty()) {
-
-					JOptionPane.showMessageDialog(null, "Preencha os campos!");
-					componentesCadastar();
-
-				} else {
-
-					posicao[codigo][0] = textNome.getText().toUpperCase();
-					posicao[codigo][1] = textEndereco.getText().toUpperCase();
-					posicao[codigo][2] = textCpf.getText().toUpperCase();
-
-					DefaultTableModel valores = (DefaultTableModel) tableConsultas.getModel();
-					valores.addRow(new Object[] { (codigo + 1), posicao[codigo][0], posicao[codigo][1],
-							posicao[codigo][2], posicaoTelefone[codigo][0], posicaoTelefone[codigo][1],
-							posicaoTelefone[codigo][2] });
-
-					// validação do codigo chegar somente no 100
-					if (codigo < 100) {
-
-						codigo++;
-
-						int desejo = JOptionPane.showConfirmDialog(null, "Deseja continuar cadastrando?");
-						// validando se sim ou se nao do JOption
-						if (desejo == JOptionPane.YES_OPTION) {
-
-							componentesCadastar();
-							textNome.setText(null);
-							textEndereco.setText(null);
-							textCpf.setText(null);
-
-						} else {
-
-							textNome.setText(null);
-							textEndereco.setText(null);
-							textCpf.setText(null);
-							telaCadastro.dispose();
-							janelaMenu();
-
-						}
+			botaoE.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Excluir();
+					JOptionPane.showMessageDialog(null,"Selecione o cliente a ser excluído");
+				}
+			});
+			botaoCo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					consultaa();
+				}
+			});
+			botaoSalva.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(jtNome.getText().isEmpty() 
+           		    || jFTCPF.getText().equals("___.___.___-__")
+                    || jtEmail.getText().isEmpty()
+                    || jtEndereco.getText().isEmpty()){
+           	 JOptionPane.showMessageDialog(null, "Informe todos os dados");
 					} else {
+					if (identificacao<=100){
+						botaoA.setEnabled(true);
+						botaoE.setEnabled(true);
+						botaoCo.setEnabled(true);
+							   salvar();
+							   JOptionPane.showMessageDialog(null,"Salvo com sucesso!");
+							   telefonee();
+                            identificacao++;
+                            cadastro.dispose();
+					    } else {
+				 		 JOptionPane.showMessageDialog(null, " Desculpe,limite de cadastro de 100 clientes atingido!");
+			             cadastro.dispose();
+				 	  }
+				   }
+				}
+			});
+			botaoExclui.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int certeza = JOptionPane.showConfirmDialog(null,"Tem certeza que quer excluir esse cadastro?");
+					if(certeza==JOptionPane.YES_OPTION){
+						if (cadastrar.getSelectedRow() != -1) {
 
-						textNome.setEnabled(false);
-						textEndereco.setEnabled(false);
-						textCpf.setEnabled(false);
+							((DefaultTableModel) cadastrar.getModel()).removeRow(cadastrar.getSelectedRow());
 
-						JOptionPane.showMessageDialog(null, "Espaço insulficiente para novos cadastros");
+							identificacao--;
 
-						telaCadastro.dispose();
-						janelaMenu();
-
+							JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+					}else {
+						JOptionPane.showMessageDialog(null, "Selecione a linha que deseja excluir");
 					}
-
-				}
-
-			}
-
-		});
-
-	}
-
-	static int verificandoLinha() {
-
-		int selectLinha = tableConsultas.getSelectedRow();
-		int posMatriz = (int) tableConsultas.getValueAt(selectLinha, 0);
-
-		return posMatriz;
-	}
-
-	static void janelaEditar() {
-
-		botaoEditar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				// validação se selecionou alguma linha (usado em outras funções
-				// tambem)
-				if (tableConsultas.getSelectedRow() != -1) {
-
-					componentesEditar();
-
-					telaEditar.add(botaoVoltarMenu);
-					acaoVoltarMenu();
-
-					telaEditar.setLayout(null);
-					telaEditar.setSize(800, 600);
-					telaEditar.getContentPane().setBackground(Color.WHITE);
-					telaEditar.setResizable(false);
-					telaEditar.setLocationRelativeTo(null);
-					telaEditar.setVisible(true);
-
-					telaEditar.add(lbEditar);
-					lbEditar.setBounds(380, -220, 600, 600);
-					lbEditar.setFont(new Font(ARIAL, Font.BOLD, 30));
-
-				} else {
-
-					JOptionPane.showMessageDialog(null, "Selecione a linha que deseja editar!");
-
-				}
-
-			}
-		});
-
-	}
-
-	static void componentesEditar() {
-
-		telaEditar.add(lbCodigo);
-		lbCodigo.setBounds(50, 150, 200, 50);
-		lbCodigo.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		int posMatriz = verificandoLinha();
-
-		telaEditar.add(lbImprimirCodigo);
-		lbImprimirCodigo.setVisible(true);
-		lbImprimirCodigo.setBounds(110, 150, 200, 50);
-		lbImprimirCodigo.setText(String.valueOf(posMatriz));
-		lbImprimirCodigo.setFont(new Font(ARIAL, Font.BOLD, 15));
-
-		telaEditar.add(lbNome);
-		lbNome.setBounds(140, 150, 200, 50);
-		lbNome.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		String posNome = (String) tableConsultas.getModel().getValueAt(posMatriz - 1, 1);
-		telaEditar.add(textNome);
-		textNome.setBounds(190, 160, 555, 30);
-		textNome.setText(posNome);
-
-		telaEditar.add(lbEndereco);
-		lbEndereco.setBounds(50, 250, 200, 50);
-		lbEndereco.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		String posEndereco = (String) tableConsultas.getModel().getValueAt(posMatriz - 1, 2);
-		telaEditar.add(textEndereco);
-		textEndereco.setBounds(125, 260, 620, 30);
-		textEndereco.setText(posEndereco);
-
-		telaEditar.add(lbCpf);
-		lbCpf.setBounds(50, 350, 200, 50);
-		lbCpf.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		String posCpf = (String) tableConsultas.getModel().getValueAt(posMatriz - 1, 3);
-		telaEditar.add(textCpf);
-		textCpf.setBounds(90, 360, 655, 30);
-		textCpf.setText(posCpf);
-
-		telaEditar.add(botaoSalvarEdicao);
-		botaoSalvarEdicao.setVisible(true);
-		botaoSalvarEdicao.setToolTipText("Clique para confirmar a edição");
-		botaoSalvarEdicao.setBounds(300, 420, 200, 50);
-
-	}
-
-	static void acaoEditar() {
-
-		botaoSalvarEdicao.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				if (textNome.getText().trim().isEmpty() || textEndereco.getText().trim().isEmpty()
-						|| textCpf.getText().trim().isEmpty()) {
-
-					JOptionPane.showMessageDialog(null, "Preencha os campos!");
-					componentesEditar();
-
-				} else {
-
-					int deseja = JOptionPane.showConfirmDialog(null, "Deseja salvar a alteração?");
-					if (deseja == JOptionPane.YES_OPTION) {
-
-						int posMatriz = verificandoLinha();
-
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(textNome.getText(), posMatriz - 1,
-								1);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(textEndereco.getText(),
-								posMatriz - 1, 2);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(textCpf.getText(), posMatriz - 1, 3);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt("", posMatriz - 1, 4);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt("", posMatriz - 1, 5);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt("", posMatriz - 1, 6);
-
-						posicao[posMatriz - 1][0] = textNome.getText();
-						posicao[posMatriz - 1][1] = textEndereco.getText();
-						posicao[posMatriz - 1][2] = textCpf.getText();
-						posicaoTelefone[posMatriz - 1][0] = "";
-						posicaoTelefone[posMatriz - 1][1] = "";
-						posicaoTelefone[posMatriz - 1][2] = "";
-
-						telaEditar.dispose();
-
-					} else if (deseja == JOptionPane.CANCEL_OPTION) {
-
-						janelaEditar();
-
-					} else {
-
-						telaEditar.dispose();
-
-					}
-
-					textNome.setText(null);
-					textEndereco.setText(null);
-					textCpf.setText(null);
 				}
 			}
-		});
-
-	}
-
-	static void janelaExcluir() {
-
-		botaoExcluir.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				if (tableConsultas.getSelectedRow() != -1) {
-
-					int deseja = JOptionPane.showConfirmDialog(null, "Deseja deixar o usuário inativo?");
-
-					if (deseja == JOptionPane.YES_OPTION) {
-
-						int posMatriz = verificandoLinha();
-
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(INATIVO,
-
-						posMatriz - 1, 1);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(INATIVO, posMatriz - 1, 2);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(INATIVO, posMatriz - 1, 3);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(INATIVO, posMatriz - 1, 4);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(INATIVO, posMatriz - 1, 5);
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt(INATIVO, posMatriz - 1, 6);
-
-						componentesExcluir();
-
-					}
-
-				} else {
-
-					JOptionPane.showMessageDialog(null, "Selecione a linha que deseja inativar!");
-
-				}
-
-			}
-		});
-
-	}
-
-	static void componentesExcluir() {
-
-		int selectLinha = tableConsultas.getSelectedRow();
-		int posMatriz = verificandoLinha();
-
-		String valorNome = (String) tableConsultas.getModel().getValueAt(selectLinha, 1);
-		String valorEnd = (String) tableConsultas.getValueAt(selectLinha, 2);
-		String valorCPF = (String) tableConsultas.getValueAt(selectLinha, 3);
-		String valorResidencial = (String) tableConsultas.getValueAt(selectLinha, 4);
-		String valorComercial = (String) tableConsultas.getValueAt(selectLinha, 5);
-		String valorCelular = (String) tableConsultas.getValueAt(selectLinha, 6);
-
-		posicao[posMatriz - 1][0] = valorNome;
-		posicao[posMatriz - 1][1] = valorEnd;
-		posicao[posMatriz - 1][2] = valorCPF;
-		posicaoTelefone[posMatriz - 1][0] = valorResidencial;
-		posicaoTelefone[posMatriz - 1][1] = valorComercial;
-		posicaoTelefone[posMatriz - 1][2] = valorCelular;
-
-	}
-
-	static void janelaTelefonar() {
-
-		botaoCadastrarTel.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				if (tableConsultas.getSelectedRow() != -1) {
-
-					int posMatriz = verificandoLinha();
-					if (posicao[posMatriz - 1][1] != "INATIVO") {
-
-						textResidencial.setText(null);
-						textComercial.setText(null);
-						textCelular.setText(null);
-
-						componentesTelefonar();
-
-						telaTelefone.add(botaoVoltarMenu);
-						acaoVoltarMenu();
-						botaoVoltarMenu.setBounds(550, 490, 200, 50);
-
-						telaTelefone.setLayout(null);
-						telaTelefone.setSize(800, 600);
-						telaTelefone.getContentPane().setBackground(Color.WHITE);
-						telaTelefone.setResizable(false);
-						telaTelefone.setLocationRelativeTo(null);
-						telaTelefone.setVisible(true);
-
-						telaTelefone.add(lbTelefone);
-						lbTelefone.setBounds(290, -220, 600, 600);
-						lbTelefone.setFont(new Font(ARIAL, Font.BOLD, 25));
-
-					} else {
-
-						JOptionPane.showMessageDialog(null,
-								"Não é possivel alterar essa linha pois o cliente está inativo!");
-
-					}
-
-				} else {
-
-					JOptionPane.showMessageDialog(null, "Selecione o cliente que deseja adicionar telefones!");
-
-				}
-
-			}
-		});
-
-	}
-
-	static void componentesTelefonar() {
-
-		telaTelefone.add(lbCodigo);
-		lbCodigo.setBounds(50, 150, 200, 50);
-		lbCodigo.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		int posMatriz = verificandoLinha();
-
-		telaTelefone.add(lbImprimirCodigo);
-		lbImprimirCodigo.setBounds(110, 150, 200, 50);
-		lbImprimirCodigo.setText(String.valueOf(posMatriz));
-		lbImprimirCodigo.setFont(new Font(ARIAL, Font.BOLD, 15));
-
-		telaTelefone.add(lbResidencial);
-		lbResidencial.setBounds(140, 150, 200, 50);
-		lbResidencial.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		String valorRes = (String) tableConsultas.getModel().getValueAt(posMatriz - 1, 4);
-
-		telaTelefone.add(textResidencial);
-		textResidencial.setBounds(225, 160, 520, 30);
-		textResidencial.setText(valorRes);
-
-		telaTelefone.add(lbComercial);
-		lbComercial.setBounds(50, 250, 200, 50);
-		lbComercial.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		String valorCom = (String) tableConsultas.getModel().getValueAt(posMatriz - 1, 5);
-
-		telaTelefone.add(textComercial);
-		textComercial.setBounds(125, 260, 620, 30);
-		textComercial.setText(valorCom);
-
-		telaTelefone.add(lbCelular);
-		lbCelular.setBounds(50, 350, 200, 50);
-		lbCelular.setFont(new Font(ARIAL, Font.PLAIN, 15));
-
-		String valorCel = (String) tableConsultas.getModel().getValueAt(posMatriz - 1, 6);
-
-		telaTelefone.add(textCelular);
-		textCelular.setBounds(105, 360, 640, 30);
-		textCelular.setText(valorCel);
-
-		telaTelefone.add(botaoSalvarTelefone);
-		botaoSalvarTelefone.setToolTipText("Clique para salvar o telefone");
-		botaoSalvarTelefone.setBounds(300, 420, 200, 50);
-
-	}
-
-	static void acaoSalvarTelefone(String[][] x) {
-
-		botaoSalvarTelefone.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				int posMatriz = verificandoLinha();
-
-				x[posMatriz - 1][0] = textResidencial.getText();
-				x[posMatriz - 1][1] = textComercial.getText();
-				x[posMatriz - 1][2] = textCelular.getText();
-
-				((DefaultTableModel) tableConsultas.getModel()).setValueAt(x[posMatriz - 1][0], posMatriz - 1, 4);
-				((DefaultTableModel) tableConsultas.getModel()).setValueAt(x[posMatriz - 1][1], posMatriz - 1, 5);
-				((DefaultTableModel) tableConsultas.getModel()).setValueAt(x[posMatriz - 1][2], posMatriz - 1, 6);
-
-				telaTelefone.dispose();
-
-			}
-		});
-
-	}
-
-	static void acaoExcluirTelefone() {
-
-		botaoExcluirTelefone.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				if (tableConsultas.getSelectedRow() != -1) {
-					if (tableConsultas.getSelectedColumn() >= 4) {
-
-						int posMatriz = verificandoLinha();
-						int selectColumn = tableConsultas.getSelectedColumn();
-
-						((DefaultTableModel) tableConsultas.getModel()).setValueAt("", posMatriz - 1, selectColumn);
-
-						componentesExcluirTel();
-
-					} else {
-
-						JOptionPane.showMessageDialog(null,
-								"Selecione somente colunas referentes a telefone para exclui-la");
-
-					}
-
-				} else {
-
-					JOptionPane.showMessageDialog(null, "Selecione a coluna do telefone que deseja excluir!");
-
-				}
-			}
-		});
-
-	}
-
-	static void componentesExcluirTel() {
-
-		int selectLinha = tableConsultas.getSelectedRow();
-		int selectColumn = tableConsultas.getSelectedColumn();
-
-		String valor = (String) tableConsultas.getValueAt(selectLinha, selectColumn);
-
-		// contando a partir das colunas do telefone ignorando as 4 colunas que
-		// trata sobre cliente
-		int coluna = selectColumn - 4;
-
-		posicaoTelefone[selectLinha][coluna] = valor;
-
-	}
-
-	static void acaoPesquisar(JTable x) {
-
-		textPesquisa.addKeyListener(new java.awt.event.KeyListener() {
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				
-				acaoBuscar(x);
-
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				acaoBuscar(x);
-
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-
-				acaoBuscar(x);
-
-			}
-		});
-
-	}
-
-	@SuppressWarnings("unchecked")
-	static void acaoBuscar(JTable x) {
-
-		DefaultTableModel model = (DefaultTableModel) tableConsultas.getModel();
-
-		@SuppressWarnings({ "rawtypes" })
-		TableRowSorter sorter = new TableRowSorter(model);
-		x.setRowSorter(sorter);
-		String text = textPesquisa.getText().toUpperCase();
-
-		if (text.length() == 0) {
-			sorter.setRowFilter(null);
-		} else {
-			sorter.setRowFilter(RowFilter.regexFilter(text));
+			});
 		}
-
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	static void limparPesquisa() {
-
-		DefaultTableModel model = (DefaultTableModel) tableConsultas.getModel();
-		TableRowSorter sorter = new TableRowSorter(model);
-		tableConsultas.setRowSorter(sorter);
-		textPesquisa.setText(null);
-
-	}
-
-	static void acaoLimparPesquisa() {
-
-		telaMenu.add(botaoLimparPesquisa);
-		botaoLimparPesquisa.setBounds(350, 158, 130, 25);
-
-		botaoLimparPesquisa.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				limparPesquisa();
-
+	
+		static void Cadastro() {
+			cadastro = new JFrame();
+			cadastro.setTitle("Cadastrar novo cliente");
+			cadastro.setSize(600,400);
+			cadastro.setResizable(false);
+			cadastro.setJMenuBar(barraMenu);
+			cadastro.setLocationRelativeTo(null);
+	        cadastro.setLayout(new GridLayout (12,10));
+			cadastro.setVisible(true);
+			JLabel info = new JLabel ("*Informe todos os dados!*");
+			cadastro.add(info);
+			JLabel id = new JLabel ("Seu código de identificação é:");
+			cadastro.add(id);
+			identifica = new JTextField(30);
+			identifica.setText("" + identificacao);
+			identifica.setEditable(false);
+			identifica.setFont(letra);
+			cadastro.add(identifica);
+			JLabel nome = new JLabel ("Nome completo");
+			cadastro.add(nome);
+			jtNome = new JTextField(30);
+			cadastro.add(jtNome);
+			JLabel cpf = new JLabel ("CPF");
+            cadastro.add(cpf);
+		    try {
+				jmCPF = new MaskFormatter("###.###.###-##");
+				jmCPF.setPlaceholderCharacter('_');
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-		});
-
-	}
-
-	static void acaoSobre() {
-
-		sobre.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null,
-						" " + "                       Cadastro de Clientes" + "\n"
-								+ "\n - Versão 1.0;" + "\n"
-								+ "\n - Desenvolvido por João Paulo Nunes Marques;" + "\n"
-								+ "\n - Matéria Algoritmo 2;" + "\n"
-								+ "\n - Orientado pelo Professor Altieres de Matos;		                    "
-								+ "\n" + "\n - Faculdade Alvorada de Maringá" + "\n" + "\n");
-
+            jFTCPF = new JFormattedTextField(jmCPF);
+            jFTCPF.setToolTipText("");
+			cadastro.add(jFTCPF);
+			JLabel email = new JLabel ("E-mail");
+			cadastro.add(email);
+			jtEmail = new JTextField(30);
+			cadastro.add(jtEmail);
+			JLabel endereco = new JLabel ("Endereço - Ex: Avenida Brasil - 1122, Maringá-PR");
+			cadastro.add(endereco);
+			jtEndereco = new JTextField(30);
+			cadastro.add(jtEndereco);
+		    cadastro.add(botaoSalva);
+		    
 			}
-		});
+		
 
-	}
-
-	static void acaoVoltarMenu() {
-
-		botaoVoltarMenu.setVisible(true);
-		botaoVoltarMenu.setToolTipText("Clique para voltar ao menu");
-		//botaoVoltarMenu.setIcon(
-				//new ImageIcon(Exercicio51.class.getResource("/com/sun/java/swing/plaf/windows/icons/HomeFolder.gif")));
-
-		botaoVoltarMenu.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				telaEditar.dispose();
-				telaCadastro.dispose();
-				telaTelefone.dispose();
-				janelaMenu();
-
+		static void telefonee(){
+			telefone = new JFrame();
+			telefone.setTitle("Cadastrar telefone(s)");
+			telefone.setSize(600,400);
+			telefone.setResizable(false);
+			telefone.setJMenuBar(barraMenu);
+			telefone.setLocationRelativeTo(null);
+		    telefone.setLayout(new GridLayout (11,10));
+		    JLabel id = new JLabel ("Seu código de identificação é:");
+		    telefone.add(id);
+			identifica = new JTextField(30);
+			identifica.setText("" + identificacao);
+			identifica.setEditable(false);
+			identifica.setFont(letra);
+			telefone.add(identifica);
+			JLabel antigooTelefone = new JLabel ("Telefone padrão");
+			telefone.add(antigooTelefone);
+			try {
+				jmFone = new MaskFormatter("(##)####-####");
+				jmFone.setPlaceholderCharacter('_');
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-		});
-
-	}
-
-	static void acaoSair() {
-
-		botaoSair.setVisible(true);
-		botaoSair.setFont(new Font(ARIAL, Font.BOLD, 15));
-		botaoSair.setToolTipText("Clique para fechar o programa");
-		botaoSair.setIcon(new ImageIcon(IMAGEM_CADASTRAR));
-
-		botaoSair.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				int desejo = JOptionPane.showConfirmDialog(null,
-						"Todos os registros serão perdidos, deseja fechar o programa?");
-				if (desejo == JOptionPane.YES_OPTION) {
-					telaMenu.dispose();
+            jFTFONE = new JFormattedTextField(jmFone);
+            jFTFONE.setColumns(10);
+            telefone.add(jFTFONE);
+			JLabel telefone1 = new JLabel ("Telefone celular");
+			telefone.add(telefone1);
+			try {
+				jmFone1 = new MaskFormatter("(##)####-####");
+				jmFone1.setPlaceholderCharacter('_');
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE1 = new JFormattedTextField(jmFone1);
+            jFTFONE1.setColumns(10);
+			telefone.add(jFTFONE1);
+			JLabel telefone2 = new JLabel ("Telefone comercial");
+			telefone.add(telefone2);
+			try {
+				jmFone2 = new MaskFormatter("(##)####-####");
+				jmFone2.setPlaceholderCharacter('_');
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTFONE2 = new JFormattedTextField(jmFone2);
+            jFTFONE2.setColumns(10);
+            telefone.add(jFTFONE2);
+			JButton cTel1 = new JButton("Cadastrar telefone(s)");
+            telefone.add(cTel1);
+			telefone.setVisible(true);
+			cTel1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(identifica.getText().isEmpty()
+							||jFTFONE.getText().isEmpty()){
+						JOptionPane.showMessageDialog(null,"Informe pelo menos o seu código de identificação e o telefone padrão!");
+					}else if (identificacaoT > identificacao){
+									JOptionPane.showMessageDialog(null,"Identificação de cliente não encontrado, verifique se a Identificação do cliente existe!");
+					} else {
+						salvarTel();
+						JOptionPane.showMessageDialog(null,"Telefone(s)cadastrado(s) com sucesso!");
+						 int continua = JOptionPane.showConfirmDialog(null, "Deseja continuar cadastrando?");
+                         if (continua == JOptionPane.YES_OPTION){
+                      	   cadastro.setVisible(false);
+                      	   Cadastro();
+						telefone.dispose();
+					} else{
+						telefone.dispose();
+					}
 				}
-
 			}
-		});
-
-	}
-
-}
+				});
+			
+		}
+		static int linhaselecionada(){
+			int escolha = cadastrar.getSelectedRow();
+			int pSistema = (int) cadastrar.getValueAt(escolha, 0);
+			return pSistema;
+			}
+		static int linhaselecionadaTel(){
+			int escolhaT = telefones.getSelectedRow();
+			int pTelefone = (int) telefones.getValueAt(escolhaT, 0);
+			return pTelefone;
+			}
+		
+		static void Atualizar() {
+			atualizar = new JFrame();
+			atualizar.setTitle("Atualizar Cadastro");
+			atualizar.setSize(800,600);
+			atualizar.setResizable(false);
+			atualizar.setJMenuBar(barraMenu);
+			atualizar.setLocationRelativeTo(null);
+			atualizar.setVisible(true);
+			cadastrar.setPreferredScrollableViewportSize( new Dimension (700,490));
+			JScrollPane scroll2 = new JScrollPane(cadastrar);
+			cadastrar.setLayout(null);
+			JPanel atual = new JPanel();
+			atual.setSize(800,600);
+			atual.add(scroll2);
+			atualizar.add(atual, BorderLayout.CENTER);
+			atual.add(editar,BorderLayout.SOUTH);
+			scroll2.setVisible(true);
+            atual.add(atualizaT,BorderLayout.SOUTH);
+			JOptionPane.showMessageDialog(null,"Escolha o cadastro a ser atualizado\n"
+					+ "dê dois cliques no(s)campo(s) a serem atualizados e informe os novos campos\n"
+					+ "e então, clique em editar cadastro!");
+			editar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cadastrar.repaint();
+					edita();
+					atualizar.setVisible(false);
+				}	
+			});
+			
+			atualizaT.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					atualizar.setVisible(false);
+					aTel();
+				}	
+			});
+			}
+		static void edita(){
+			edit = new JFrame();
+			edit.setTitle("Atualizar telefone(s)");
+			edit.setSize(800,600);
+			edit.setResizable(false);
+			edit.setJMenuBar(barraMenu);
+			edit.setLocationRelativeTo(null);
+			edit.setLayout(new GridLayout(12,10));
+			int confere = linhaselecionada();
+			JLabel info = new JLabel ("*Informe todos os dados!*");
+			edit.add(info);
+			JLabel id = new JLabel ("Seu código de identificação é:");
+			edit.add(id);
+			identifica = new JTextField(30);
+			identifica.setText(String.valueOf(confere));
+			identifica.setEditable(false);
+			identifica.setFont(letra);
+			edit.add(identifica);
+			String pNome = (String) cadastrar.getModel().getValueAt(confere, 1);
+			JLabel nome = new JLabel ("Nome completo");
+			edit.add(nome);
+			jtNome = new JTextField(30);
+			jtNome.setText(pNome);
+			edit.add(jtNome);
+			String pCPF = (String) cadastrar.getModel().getValueAt(confere, 2);
+			JLabel cpf = new JLabel ("CPF");
+			edit.add(cpf);
+		    try {
+				jmCPF = new MaskFormatter("###.###.###-##");
+				jmCPF.setPlaceholderCharacter('_');
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+            jFTCPF = new JFormattedTextField(jmCPF);
+            jFTCPF.setText(pCPF);
+            jFTCPF.setToolTipText("");
+            edit.add(jFTCPF);
+            String pEmail = (String) cadastrar.getModel().getValueAt(confere, 3);
+			JLabel email = new JLabel ("E-mail");
+			edit.add(email);
+			jtEmail = new JTextField(30);
+			edit.add(jtEmail);
+			jtEmail.setText(pEmail);
+			String pEndereco = (String) cadastrar.getModel().getValueAt(confere, 4);
+			JLabel endereco = new JLabel ("Endereço - Ex: Avenida Brasil - 1122, Maringá-PR");
+			edit.add(endereco);
+			jtEndereco = new JTextField(30);
+			jtEndereco.setText(pEndereco);
+			edit.add(jtEndereco);
+			edit.setVisible(true);
+			edit.add(acaoeditar);
+			acaoeditar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cadastrar.repaint();
+					atualizar.setVisible(false);
+					JOptionPane.showMessageDialog(null, "Cadastro atualizado com sucesso!");
+				}	
+			});
+		}
+		
+		static void aTel(){
+			atTelefone = new JFrame();
+			atTelefone.setTitle("Atualizar telefone(s)");
+			atTelefone.setSize(800,600);
+			atTelefone.setResizable(false);
+			atTelefone.setJMenuBar(barraMenu);
+			atTelefone.setLocationRelativeTo(null);
+			atTelefone.setVisible(true);
+			telefones.setPreferredScrollableViewportSize( new Dimension (700,490));
+			JScrollPane scroll3 = new JScrollPane(telefones);
+			telefones.setLayout(null);
+			JPanel atualT = new JPanel();
+			atualT.setSize(800,600);
+			atualT.add(scroll3);
+			atTelefone.add(atualT, BorderLayout.CENTER);
+			scroll3.setVisible(true);
+			JOptionPane.showMessageDialog(null,"Escolha o cadastro a ser atualizado\n"
+					+ "dê dois cliques no(s)campo(s) a serem atualizados e informe os novos campos!");
+			
+		}
+			
+		static void Excluir() {
+			excluir = new JFrame();
+			excluir.setTitle("Excluir Cadastro");
+			excluir.setSize(800,600);
+			excluir.setResizable(false);
+			excluir.setJMenuBar(barraMenu);
+			excluir.setLocationRelativeTo(null);
+			excluir.setVisible(true);
+			cadastrar.setPreferredScrollableViewportSize( new Dimension (550,500));
+			JScrollPane scroll1 = new JScrollPane(cadastrar);
+			cadastrar.setLayout(null);
+			JPanel exclui = new JPanel();
+			exclui.setSize(800,600);
+			exclui.add(scroll1);
+			excluir.add(exclui, BorderLayout.CENTER);
+			scroll1.setVisible(true);
+			excluir.add(botaoExclui,BorderLayout.SOUTH);
+			 JButton eTele = new JButton("Excluir telefone(s)");
+			 exclui.add(eTele,BorderLayout.SOUTH);
+		        eTele.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						excluir.setVisible(false);
+						excluirTel();
+						JOptionPane.showMessageDialog(null, "Selecione a linha com os telefones a serem excluídos");
+					}	
+				});
+			}
+		 static void excluirTel(){
+			    consultaaTele = new JFrame();
+	        	consultaaTele.setTitle("Excluir telefone(s)");
+				consultaaTele.setSize(800,600);
+				consultaaTele.setResizable(false);
+				consultaaTele.setJMenuBar(barraMenu);
+				consultaaTele.setLocationRelativeTo(null);
+				consultaaTele.setVisible(true);
+				telefones.setPreferredScrollableViewportSize( new Dimension (750,490));
+				JScrollPane scrollTel = new JScrollPane(telefones);
+				telefones.setLayout(null);
+				JPanel excluiT = new JPanel();
+				excluiT.add(scrollTel);
+				excluiT.setSize(800,600);
+				consultaaTele.add(excluiT, BorderLayout.CENTER);
+				scrollTel.setVisible(true);
+				JButton excT = new JButton("Excluir telefone(s)");
+				excluiT.add(excT, BorderLayout.SOUTH);
+				excT.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						((DefaultTableModel)telefones.getModel()).removeRow(telefones.getSelectedRow());
+						JOptionPane.showMessageDialog(null,"Excluído com sucesso!");
+					}	
+				});
+		 }
+		static void Consultar() {
+			JButton cConsultar = new JButton ("Consultar");
+	        consultar.add(cConsultar);
+	        cConsultar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					consultar.setVisible(false); 
+					consultaa();
+				}	
+			});
+	        JButton cTele = new JButton("Consultar telefone(s)");
+	        consultar.add(cTele);
+	        cTele.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					consultar.setVisible(false); 
+					consultaaTel();
+				}	
+			});
+	       }
+       
+        static void consultaa(){
+        	consulta = new JFrame();
+        	consulta.setTitle("Consultar Cadastro");
+			consulta.setSize(800,600);
+			consulta.setResizable(false);
+			consulta.setJMenuBar(barraMenu);
+			consulta.setLocationRelativeTo(null);
+			consulta.setVisible(true);
+			cadastrar.setPreferredScrollableViewportSize( new Dimension (750,490));
+			JScrollPane scroll = new JScrollPane(cadastrar);
+			cadastrar.setEnabled(false);
+			cadastrar.setLayout(null);
+			JPanel consult = new JPanel();
+			consult.setSize(800,600);
+			consult.add(scroll);
+			consulta.add(consult, BorderLayout.CENTER);
+			scroll.setVisible(true);
+			JButton cTele = new JButton("Consultar telefone(s)");
+	        consulta.add(cTele,BorderLayout.SOUTH);
+	        cTele.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					consulta.setVisible(false); 
+					consultaaTel();
+				}	
+			});
+			}
+        static void consultaaTel(){
+        	consultaaTele = new JFrame();
+        	consultaaTele.setTitle("Consultar telefone(s)");
+			consultaaTele.setSize(800,600);
+			consultaaTele.setResizable(false);
+			consultaaTele.setJMenuBar(barraMenu);
+			consultaaTele.setLocationRelativeTo(null);
+			consultaaTele.setVisible(true);
+			telefones.setPreferredScrollableViewportSize( new Dimension (750,490));
+			JScrollPane scrollTel = new JScrollPane(telefones);
+			telefones.setEnabled(false);
+			telefones.setLayout(null);
+			JPanel consultaT = new JPanel();
+			consultaT.add(scrollTel);
+			consultaT.setSize(800,600);
+			consultaaTele.add(consultaT, BorderLayout.CENTER);
+			scrollTel.setVisible(true);
+			JButton volta = new JButton("Voltar");
+			consultaT.add(volta, BorderLayout.SOUTH);
+			volta.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					consultaaTele.setVisible(false); 
+					consultaa();
+				}	
+			});
+        }
+		
+        static void salvar(){
+        	   sistema [total] [0] = identifica.getText();
+        	   sistema [total] [1] = jtNome.getText();
+        	   sistema [total] [2] = jFTCPF.getText();
+        	   sistema [total] [3] = jtEmail.getText();
+        	   sistema [total] [4] = jtEndereco.getText();
+        	   total++;
+        	}
+        static void salvarTel(){
+     	   tel [infoTel] [0] = identifica.getText();
+     	   tel [infoTel] [1] = jFTFONE.getText();
+     	   tel [infoTel] [2] = jFTFONE1.getText();
+     	   tel [infoTel] [3] = jFTFONE2.getText(); 
+     	   infoTel++;
+        }
+ }
