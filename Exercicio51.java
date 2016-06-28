@@ -65,11 +65,11 @@ public class Exercicio51 {
         
         static JTextField identifica;
         static JTextField jtNome;
-	static MaskFormatter jmCPF;
-	static JTextField jtEmail; 
-	static MaskFormatter jmFone;
-	static MaskFormatter jmFone1; 
-	static MaskFormatter jmFone2;
+		static MaskFormatter jmCPF;
+		static JTextField jtEmail; 
+		static MaskFormatter jmFone;
+		static MaskFormatter jmFone1; 
+		static MaskFormatter jmFone2;
         static JTextField jtEndereco;
         static JFormattedTextField jFTCPF;
         static JFormattedTextField jFTFONE;
@@ -109,18 +109,18 @@ public class Exercicio51 {
 			tela.setVisible(true);
 			tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-		    menuTela = new JPanel();
+			menuTela = new JPanel();
 		    menuTela.setSize(600,400);
 		    menuTela.setLayout(null);
-		    menuTela.setVisible(true);
-		    menuTela.add(botaoC);
-		    menuTela.add(botaoA);
-		    menuTela.add(botaoE);
-		    menuTela.add(botaoCo);
-		    botaoA.setEnabled(false);
-		    botaoE.setEnabled(false);
-		    botaoCo.setEnabled(false);
-		    menuTela.add(fundo);
+			menuTela.setVisible(true);
+			menuTela.add(botaoC);
+			menuTela.add(botaoA);
+			menuTela.add(botaoE);
+			menuTela.add(botaoCo);
+			botaoA.setEnabled(false);
+			botaoE.setEnabled(false);
+			botaoCo.setEnabled(false);
+			menuTela.add(fundo);
 		    fundo.setBounds(0,0,600,400);
 			tela.add(menuTela);
 			
@@ -470,10 +470,28 @@ public class Exercicio51 {
 			atualT.setSize(800,600);
 			atualT.add(scroll3);
 			atTelefone.add(atualT, BorderLayout.CENTER);
+			atTelefone.add(atualizaTel,BorderLayout.SOUTH);
 			scroll3.setVisible(true);
 			JOptionPane.showMessageDialog(null,"Escolha o cadastro a ser atualizado\n"
 					+ "dê dois cliques no(s)campo(s) a serem atualizados e informe os novos campos!");
+			atualizaTel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				   atualizar.setVisible(false);
+				   atTelefone.setVisible(false);
+					editaT();
+				}	
+			});
 			
+		}
+		static void editaT(){
+			editT = new JFrame();
+			editT.setTitle("Atualizar telefone(s)");
+			editT.setSize(800,600);
+			editT.setResizable(false);
+			editT.setJMenuBar(barraMenu);
+			editT.setLocationRelativeTo(null);
+			editT.setLayout(new GridLayout(12,10));
+			editT.setVisible(true);
 		}
 			
 		static void Excluir() {
