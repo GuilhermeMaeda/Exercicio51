@@ -183,6 +183,8 @@ public class Exercicio51 {
 			botaoCo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					consultaa();
+					JOptionPane.showMessageDialog(null, "Se você encontrar um cadastro em azul\n"
+							+ "isto indica que ele foi o último a ser atualizado pelo cliente"); 
 				}
 			});
 			botaoSalva.addActionListener(new ActionListener() {
@@ -370,6 +372,7 @@ public class Exercicio51 {
 			cadastrar.setPreferredScrollableViewportSize( new Dimension (700,490));
 			JScrollPane scroll2 = new JScrollPane(cadastrar);
 			cadastrar.setLayout(null);
+			cadastrar.setEnabled(true);
 			JPanel atual = new JPanel();
 			atual.setSize(800,600);
 			atual.add(scroll2);
@@ -382,8 +385,7 @@ public class Exercicio51 {
 					+ "e então, clique em editar cadastro!");
 			editar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cadastrar.repaint();
-					edita();
+					JOptionPane.showMessageDialog(null,"Cadastro atualizado com sucesso!");
 					atualizar.setVisible(false);
 				}	
 			});
