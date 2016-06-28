@@ -329,9 +329,10 @@ public class Exercicio51 {
 			telefone.setVisible(true);
 			cTel1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(identifica.getText().isEmpty()
-							||jFTFONE.getText().isEmpty()){
-						JOptionPane.showMessageDialog(null,"Informe pelo menos o seu código de identificação e o telefone padrão!");
+					if(jFTFONE.getText().equals("(__)____-____")
+							||jFTFONE1.getText().equals("(__)____-____")
+							||jFTFONE2.getText().equals("(__)____-____")){
+						JOptionPane.showMessageDialog(null,"Informe todos os campos!");
 					}else if (identificacaoT > identificacao){
 									JOptionPane.showMessageDialog(null,"Identificação de cliente não encontrado, verifique se a Identificação do cliente existe!");
 					} else {
