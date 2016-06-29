@@ -215,18 +215,13 @@ public class Exercicio51 {
 				public void actionPerformed(ActionEvent e) {
 					int certeza = JOptionPane.showConfirmDialog(null,"Tem certeza que quer excluir esse cadastro?");
 					if(certeza==JOptionPane.YES_OPTION){
-						if (cadastrar.getSelectedRow() != -1) {
-
-							((DefaultTableModel) cadastrar.getModel()).removeRow(cadastrar.getSelectedRow());
-
-							identificacao--;
-
-							JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+							//((DefaultTableModel) cadastrar.getModel()).removeRow(cadastrar.getSelectedRow());
+							 //identificacao--;
+                         JOptionPane.showMessageDialog(null, "Comando em manutenção!");
 					}else {
 						JOptionPane.showMessageDialog(null, "Selecione a linha que deseja excluir");
 					}
-				}
-			}
+		}
 			});
 		}
 	
@@ -351,16 +346,6 @@ public class Exercicio51 {
 				});
 			
 		}
-		static int linhaselecionada(){
-			int escolha = cadastrar.getSelectedRow();
-			int pSistema = (int) cadastrar.getValueAt(escolha, 0);
-			return pSistema;
-			}
-		static int linhaselecionadaTel(){
-			int escolhaT = telefones.getSelectedRow();
-			int pTelefone = (int) telefones.getValueAt(escolhaT, 0);
-			return pTelefone;
-			}
 		
 		static void Atualizar() {
 			atualizar = new JFrame();
@@ -387,6 +372,7 @@ public class Exercicio51 {
 			editar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,"Cadastro atualizado com sucesso!");
+					cadastrar.revalidate();
 					atualizar.setVisible(false);
 				}	
 			});
@@ -406,23 +392,18 @@ public class Exercicio51 {
 			edit.setJMenuBar(barraMenu);
 			edit.setLocationRelativeTo(null);
 			edit.setLayout(new GridLayout(12,10));
-			int confere = linhaselecionada();
 			JLabel info = new JLabel ("*Informe todos os dados!*");
 			edit.add(info);
 			JLabel id = new JLabel ("Seu código de identificação é:");
 			edit.add(id);
 			identifica = new JTextField(30);
-			identifica.setText(String.valueOf(confere));
 			identifica.setEditable(false);
 			identifica.setFont(letra);
 			edit.add(identifica);
-			String pNome = (String) cadastrar.getModel().getValueAt(confere, 1);
 			JLabel nome = new JLabel ("Nome completo");
 			edit.add(nome);
 			jtNome = new JTextField(30);
-			jtNome.setText(pNome);
 			edit.add(jtNome);
-			String pCPF = (String) cadastrar.getModel().getValueAt(confere, 2);
 			JLabel cpf = new JLabel ("CPF");
 			edit.add(cpf);
 		    try {
@@ -432,20 +413,15 @@ public class Exercicio51 {
 				e.printStackTrace();
 			}
             jFTCPF = new JFormattedTextField(jmCPF);
-            jFTCPF.setText(pCPF);
             jFTCPF.setToolTipText("");
             edit.add(jFTCPF);
-            String pEmail = (String) cadastrar.getModel().getValueAt(confere, 3);
 			JLabel email = new JLabel ("E-mail");
 			edit.add(email);
 			jtEmail = new JTextField(30);
 			edit.add(jtEmail);
-			jtEmail.setText(pEmail);
-			String pEndereco = (String) cadastrar.getModel().getValueAt(confere, 4);
 			JLabel endereco = new JLabel ("Endereço - Ex: Avenida Brasil - 1122, Maringá-PR");
 			edit.add(endereco);
 			jtEndereco = new JTextField(30);
-			jtEndereco.setText(pEndereco);
 			edit.add(jtEndereco);
 			edit.setVisible(true);
 			edit.add(acaoeditar);
@@ -544,8 +520,8 @@ public class Exercicio51 {
 				excluiT.add(excT, BorderLayout.SOUTH);
 				excT.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						((DefaultTableModel)telefones.getModel()).removeRow(telefones.getSelectedRow());
-						JOptionPane.showMessageDialog(null,"Excluído com sucesso!");
+						//((DefaultTableModel)telefones.getModel()).removeRow(telefones.getSelectedRow());
+						JOptionPane.showMessageDialog(null,"Comando em manutenção!");
 					}	
 				});
 		 }
